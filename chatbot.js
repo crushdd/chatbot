@@ -59,13 +59,13 @@ client.on('message', async (message) => {
     const chat = await message.getChat();
 
     // Opções para interagir com o menu principal
-    if (message.body.match(/(menu|Menu|oi|Oi|Olá|olá|ola|Ola)/i)) {
+    if (message.body.match(/(menu|Menu|oi|Oi|Olá|olá|ola|Ola|interessado)/i)) {
         await simulateTyping(chat, 2000);
         const contact = await message.getContact();
         const name = contact.pushname || 'Amigo';
         await client.sendMessage(
             message.from,
-            `Olá, ${name.split(' ')[0]}! Sou o assistente virtual da empresa tal. Escolha uma das opções abaixo digitando o número correspondente:\n\n` +
+            `Olá, ${name.split(' ')[0]}! Sou o assistente virtual da Hyper. Escolha uma das opções abaixo digitando o número correspondente:\n\n` +
             '1 - Como funciona\n' +
             '2 - Valores dos planos\n' +
             '3 - Fazer teste no Android\n' +
