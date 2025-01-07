@@ -75,14 +75,6 @@ client.on('message', async (message) => {
             '7 - Receber imagem informativa\n' +
             '8 - Baixar e enviar vídeo informativo'
         );
-    } else if (message.body === '1') {
-        // Resposta para a opção 1
-        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
-        await client.sendMessage(message.from, 'Disponibilizamos a internet ilimitada por meio do nosso aplicativo. Basta baixá-lo, fazer login com o acesso iremos fornecer, e conectar. Enquanto você mantiver o aplicativo aberto e conectado, terá acesso à internet ilimitada.');
-    } else if (message.body === '2') {
-        // Resposta para a opção 2
-        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
-        await client.sendMessage(message.from, '### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*\n\n====================== \n*Plano Mensal:* R$25,00 /mês  30 dias de internet ilimitada (sem acesso para rotear para TV/computador/celular)\n\n-------------------------------------------------\n*Plano Bronze* 🥉 3 Meses de internet ilimitada por: *R$69,90*  (Ficam apenas R$23,30 por mês)\n\n-------------------------------------------------\n*Plano Prata* 🥈 6 Meses de internet ilimitada por: *R$129,90*  (Ficam apenas R$21,65 por mês) + 1 Mês de Bônus (Pague 6 e Leve 7 meses)\n\n-------------------------------------------------\n*Plano Ouro* 🥇 12 Meses de internet ilimitada por: *R$226,90*  (Ficam apenas R$18,90 por mês) + 2 Meses de Bônus (Pague 12 e Leve 14 meses)\n\n======================\n\n### *PLANOS COM ACESSO PARA ROTEAR INTERNET:*\n*(DISPONIVEL APENAS PARA PLANOS COMPRADOS PARA ANDROID)*\n\n====================== \n*Plano Mensal:* R$35,00 /mês  30 dias de internet ilimitada + roteamento ilimitado para TV/computador/celular\n\n-------------------------------------------------\n*Plano Bronze* 🥉 3 Meses de internet ilimitada + roteamento por: *R$95,00*  (Ficam apenas R$31,67 por mês)\n\n-------------------------------------------------\n*Plano Prata* 🥈 6 Meses de internet ilimitada + roteamento por: *R$180,00*  (Ficam apenas R$30,00 por mês) + 1 Mês de Bônus (Pague 6 e Leve 7 meses)\n\n-------------------------------------------------\n*Plano Ouro* 🥇 12 Meses de internet ilimitada + roteamento por: *R$330,00*  (Ficam apenas R$27,50 por mês) + 2 Meses de Bônus (Pague 12 e Leve 14 meses)\n\n======================');
     } else if (message.body === '3') {
         // Resposta para a opção 3
         await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
@@ -143,4 +135,6 @@ client.initialize();
 // Lidar com desconexões ou falhas
 client.on('disconnected', (reason) => {
     console.log('Cliente desconectado. Razão:', reason);
+    // Reconnection logic (optional)
+    setTimeout(() => client.initialize(), 5000); // Tenta reconectar após 5 segundos
 });
