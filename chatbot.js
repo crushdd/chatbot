@@ -112,7 +112,7 @@ client.on('message', async (message) => {
 
             // Enviar o vídeo para a conversa
             const media = MessageMedia.fromFilePath(videoFilePath); // Criar o objeto de mídia
-            await client.sendMessage(message.from, media, { caption: 'Aqui está o vídeo tutorial que você solicitou!' });
+            await client.sendMessage(message.from, media, { caption: 'Video ensinando como conectar no aplicativo!' });
 
             break;
         case '4':
