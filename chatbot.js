@@ -35,6 +35,12 @@ async function downloadVideo(url, filePath) {
     });
 }
 
+// Função para simular digitação
+async function simulateTyping(chat, duration) {
+    await chat.sendStateTyping();
+    return new Promise(resolve => setTimeout(resolve, duration));
+}
+
 // Gerar o QR Code para autenticação
 client.on('qr', (qr) => {
     qrcode.generate(qr, { small: true });
@@ -55,13 +61,15 @@ client.on('message', async (message) => {
 
     if (response) {
         // Respondendo com a resposta associada
+        const chat = await message.getChat();
+        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
         message.reply(response);
         console.log('Resposta enviada:', response);
     } else {
         // Enviando o menu se a mensagem for de saudação ou pedido de menu
         if (message.body.match(/(menu|Menu|oi|Oi|Olá|olá|ola|Ola)/i)) {
             const chat = await message.getChat();
-            await chat.sendStateTyping(); // Simulando Digitação
+            await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
             const contact = await message.getContact(); // Pegando o contato
             const name = contact.pushname; // Pegando o nome do contato
             await client.sendMessage(
@@ -77,21 +85,15 @@ client.on('message', async (message) => {
                 '8 - Baixar e enviar vídeo informativo'
             );
         } else if (message.body === '3') {
-            // Enviando a resposta padrão da pergunta 3
-            await client.sendMessage(
-                message.from,
-                'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.'
-            );
+            // Resposta para a opção 3
+            const chat = await message.getChat();
 
-            // Enviando as instruções de conexão
-            await client.sendMessage(
-                message.from,
-                `👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções de conexão: Abra o aplicativo com o seu Wi-Fi ligado. Após abrir o aplicativo, desligue o Wi-Fi e ligue os seus dados móveis. Certifique-se de que apareça a indicação de 3G, H+, 4G ou 5G. Insira o usuário e senha acima, escolha a opção correspondente à sua operadora e clique em conectar. Aguarde 15 segundos. Se não funcionar, teste todas as opções disponíveis para a sua operadora no aplicativo.`
-            );
+            await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+            await client.sendMessage(message.from, '👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções de conexão: Abra o aplicativo com o seu Wi-Fi ligado. Após abrir o aplicativo, desligue o Wi-Fi e ligue os seus dados móveis. Certifique-se de que apareça a indicação de 3G, H+, 4G ou 5G. Insira o usuário e senha acima, escolha a opção correspondente à sua operadora e clique em conectar. Aguarde 15 segundos. Se não funcionar, teste todas as opções disponíveis para a sua operadora no aplicativo.');
 
-            // Baixar e enviar o vídeo atualizado
-            const videoUrl = 'https://drive.google.com/uc?id=1W9z8h-n4DfnzAPiDoqiCZf1s2oZQVPjH&export=download'; // Novo link do vídeo
-            const filePath = './videoConexaoAndroid.mp4'; // Caminho para salvar o vídeo localmente
+            await simulateTyping(chat, 3000); // Pausa antes de enviar o vídeo
+            const videoUrl = 'https://drive.google.com/uc?id=1W9z8h-n4DfnzAPiDoqiCZf1s2oZQVPjH&export=download'; // Link para download direto
+            const filePath = './videoInformativo.mp4'; // Caminho para salvar o vídeo localmente
 
             try {
                 await downloadVideo(videoUrl, filePath);
