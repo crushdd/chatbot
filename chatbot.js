@@ -35,6 +35,21 @@ async function downloadVideo(url, filePath) {
     });
 }
 
+// Função para baixar arquivo
+async function downloadFile(url, filePath) {
+    const writer = fs.createWriteStream(filePath);
+    const response = await axios({
+        url,
+        method: 'GET',
+        responseType: 'stream',
+    });
+    response.data.pipe(writer);
+    return new Promise((resolve, reject) => {
+        writer.on('finish', resolve);
+        writer.on('error', reject);
+    });
+}
+
 // Função para simular digitação
 async function simulateTyping(chat, duration) {
     await chat.sendStateTyping();
@@ -128,35 +143,54 @@ client.on('message', async (message) => {
                 } else if (userReply.includes('vivo') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 2000);
 
-                    // Links para os arquivos no Google Drive
+                    // Links para os arquivos e vídeo no Google Drive
                     const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
                     const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
 
-                    await client.sendMessage(
-                        response.from,
-                        `Aqui está o arquivo de configuração para Vivo no iPhone:\n${vivoFileLink}`
-                    );
+                    // Baixando o arquivo e o vídeo
+                    const filePath = './vivoFile_iphone.zip';
+                    const videoPath = './vivoVideo_iphone.mp4';
+
+                    await downloadFile(vivoFileLink, filePath);
+                    await downloadVideo(vivoVideoLink, videoPath);
+
+                    // Enviar o arquivo e o vídeo
+                    const fileMedia = MessageMedia.fromFilePath(filePath);
+                    const videoMedia = MessageMedia.fromFilePath(videoPath);
+
+                    await client.sendMessage(response.from, fileMedia, {
+                        caption: 'Arquivo de configuração para Vivo no iPhone'
+                    });
                     await simulateTyping(chat, 3000); // Simula pausa antes de enviar o vídeo
-                    await client.sendMessage(
-                        response.from,
-                        `Aqui está o vídeo tutorial para Vivo no iPhone:\n${vivoVideoLink}`
-                    );
+                    await client.sendMessage(response.from, videoMedia, {
+                        caption: 'Vídeo tutorial para Vivo no iPhone'
+                    });
+
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 2000);
 
-                    // Links para os arquivos no Google Drive
+                    // Links para os arquivos e vídeo no Google Drive
                     const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
                     const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
 
-                    await client.sendMessage(
-                        response.from,
-                        `Aqui está o arquivo de configuração para TIM no iPhone:\n${timFileLink}`
-                    );
+                    // Baixando o arquivo e o vídeo
+                    const timFilePath = './timFile_iphone.zip';
+                    const timVideoPath = './timVideo_iphone.mp4';
+
+                    await downloadFile(timFileLink, timFilePath);
+                    await downloadVideo(timVideoLink, timVideoPath);
+
+                    // Enviar o arquivo e o vídeo
+                    const timFileMedia = MessageMedia.fromFilePath(timFilePath);
+                    const timVideoMedia = MessageMedia.fromFilePath(timVideoPath);
+
+                    await client.sendMessage(response.from, timFileMedia, {
+                        caption: 'Arquivo de configuração para TIM no iPhone'
+                    });
                     await simulateTyping(chat, 3000); // Simula pausa antes de enviar o vídeo
-                    await client.sendMessage(
-                        response.from,
-                        `Aqui está o vídeo tutorial para TIM no iPhone:\n${timVideoLink}`
-                    );
+                    await client.sendMessage(response.from, timVideoMedia, {
+                        caption: 'Vídeo tutorial para TIM no iPhone'
+                    });
                 } else {
                     await simulateTyping(chat, 2000);
                     await client.sendMessage(
