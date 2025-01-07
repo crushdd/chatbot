@@ -82,27 +82,27 @@ client.on('message', async (message) => {
     // Responder às opções do menu
     switch (message.body) {
         case '1':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 3000);
             await message.reply(
                 'Oferecemos internet ilimitada por meio de nosso aplicativo. É simples: baixe, faça login com as credenciais fornecidas e conecte. Enquanto estiver conectado ao app, você terá acesso à internet ilimitada!'
             );
             break;
         case '2':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 2500);
             await client.sendMessage(message.from, options['Valores dos planos']);
             break;
         case '3':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 3600);
             await client.sendMessage(
                 message.from,
                 'Por favor, *INSTALE* este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro e abra-o com o Wi-Fi ligado.'
             );
-            await simulateTyping(chat, 3000);
+            await simulateTyping(chat, 2100);
             await client.sendMessage(
                 message.from,
                 '👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
             );
-            await simulateTyping(chat, 3000);
+            await simulateTyping(chat, 3150);
             
             // Agora, o vídeo será baixado e enviado diretamente
             const videoLink = 'https://drive.google.com/uc?export=download&id=1B30tef3Ic9lImJy6J_EadmjwlhOUcJcd';
@@ -133,38 +133,38 @@ client.on('message', async (message) => {
 
                 // Caso o usuário mencione "vivo iphone"
                 if (userReply.includes('vivo') && userReply.includes('iphone')) {
-                    await simulateTyping(chat, 2000);
+                    await simulateTyping(chat, 2500);
 
                     // Links para os arquivos no Google Drive
-                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1_Tpg6dPDs74Hp_ovHVfJ715dJairUwnY';
-                    const vivoFilePath = path.join(__dirname, 'vivoteste.npv4'); // Caminho para salvar o arquivo com extensão .inpv
+                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
+                    const vivoFilePath = path.join(__dirname, 'vivotestepraiphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
 
                     const media = MessageMedia.fromFilePath(vivoFilePath);
                     await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para Vivo no iPhone' });
 
-                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar
+                    await simulateTyping(chat, 3500); // Simula pausa antes de enviar
                     await client.sendMessage(
                         response.from,
-                        `Aqui está o vídeo tutorial para Vivo no iPhone:\n${vivoFileLink}`
+                        `Aqui está o vídeo tutorial para conectar na Vivo no iPhone:\n${vivoFileLink}`
                     );
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
-                    await simulateTyping(chat, 2000);
+                    await simulateTyping(chat, 3000);
 
                     // Links para os arquivos no Google Drive
                     const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
-                    const timFilePath = path.join(__dirname, 'tim_config_iphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
+                    const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(timFileLink, timFilePath); // Baixar arquivo do link
 
                     const media = MessageMedia.fromFilePath(timFilePath);
                     await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
 
-                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar
+                    await simulateTyping(chat, 3500); // Simula pausa antes de enviar
                     await client.sendMessage(
                         response.from,
-                        `Aqui está o vídeo tutorial para TIM no iPhone:\n${timFileLink}`
+                        `Aqui está o vídeo tutorial para conectar na TIM no iPhone:\n${timFileLink}`
                     );
                 }
             });
