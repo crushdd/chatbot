@@ -77,19 +77,6 @@ options['Valores dos planos'] = `### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*
 
 options['Fazer teste no Android'] = 'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.';
 
-// Configuração do WhatsApp Web
-const client = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        headless: true,
-        executablePath: '/usr/bin/google-chrome-stable',
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-        ],
-    },
-});
-
 // Gerar o QR Code para autenticação
 client.on('qr', (qr) => {
     qrcode.generate(qr, { small: true });
