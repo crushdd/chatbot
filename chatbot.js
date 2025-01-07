@@ -1,6 +1,17 @@
 const qrcode = require('qrcode-terminal');
-const { Client, MessageMedia } = require('whatsapp-web.js'); // Remover a importação de Buttons e List, não são necessárias aqui
-const client = new Client();
+const { Client, MessageMedia } = require('whatsapp-web.js'); 
+
+// Inicializando o cliente com a configuração do Puppeteer
+const client = new Client({
+    puppeteer: {
+        headless: true,
+        executablePath: "/usr/bin/google-chrome-stable",
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+        ],
+    },
+});
 
 // Serviço de leitura do QR Code
 client.on('qr', qr => {
