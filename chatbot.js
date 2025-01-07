@@ -3,6 +3,9 @@ const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const readline = require('readline');
 
+// Armazenando as opções e respostas
+let options = {};
+
 // Configuração do WhatsApp Web
 const client = new Client({
     authStrategy: new LocalAuth(),
@@ -36,15 +39,20 @@ client.on('ready', () => {
         if (option === '1') {
             rl.question('Digite a pergunta da nova opção: ', (question) => {
                 rl.question('Digite a resposta para a pergunta: ', (answer) => {
-                    // Aqui você pode adicionar o código para salvar a nova opção e resposta
+                    // Armazenando a opção e a resposta no objeto 'options'
+                    options[question] = answer;
                     console.log(`Opção "${question}" com resposta "${answer}" foi adicionada.`);
                     rl.close();
                 });
             });
         } else if (option === '2') {
-            rl.question('Digite o número da opção a ser deletada: ', (optionToDelete) => {
-                // Aqui você pode adicionar o código para deletar a opção
-                console.log(`Opção número "${optionToDelete}" foi deletada.`);
+            rl.question('Digite a pergunta da opção a ser deletada: ', (questionToDelete) => {
+                if (options[questionToDelete]) {
+                    delete options[questionToDelete];
+                    console.log(`Opção "${questionToDelete}" foi deletada.`);
+                } else {
+                    console.log('Opção não encontrada.');
+                }
                 rl.close();
             });
         } else {
@@ -52,6 +60,22 @@ client.on('ready', () => {
             rl.close();
         }
     });
+});
+
+// Lidar com as mensagens recebidas no WhatsApp
+client.on('message', (message) => {
+    console.log('Mensagem recebida:', message.body);
+    
+    // Verificando se a mensagem recebida é uma das perguntas armazenadas
+    const response = options[message.body];
+    
+    if (response) {
+        // Respondendo com a resposta associada
+        message.reply(response);
+        console.log('Resposta enviada:', response);
+    } else {
+        console.log('Nenhuma resposta encontrada para a mensagem.');
+    }
 });
 
 // Iniciar o cliente
