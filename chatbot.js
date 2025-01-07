@@ -76,10 +76,22 @@ client.on('message', async (message) => {
                 '7 - Receber imagem informativa\n' +
                 '8 - Baixar e enviar vídeo informativo'
             );
-        } else if (message.body === '8') {
-            // Baixar e enviar o vídeo
-            const videoUrl = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F'; // Link para download direto
-            const filePath = './videoInformativo.mp4'; // Caminho para salvar o vídeo localmente
+        } else if (message.body === '3') {
+            // Enviando a resposta padrão da pergunta 3
+            await client.sendMessage(
+                message.from,
+                'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.'
+            );
+
+            // Enviando as instruções de conexão
+            await client.sendMessage(
+                message.from,
+                `👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções de conexão: Abra o aplicativo com o seu Wi-Fi ligado. Após abrir o aplicativo, desligue o Wi-Fi e ligue os seus dados móveis. Certifique-se de que apareça a indicação de 3G, H+, 4G ou 5G. Insira o usuário e senha acima, escolha a opção correspondente à sua operadora e clique em conectar. Aguarde 15 segundos. Se não funcionar, teste todas as opções disponíveis para a sua operadora no aplicativo.`
+            );
+
+            // Baixar e enviar o vídeo atualizado
+            const videoUrl = 'https://drive.google.com/uc?id=1W9z8h-n4DfnzAPiDoqiCZf1s2oZQVPjH&export=download'; // Novo link do vídeo
+            const filePath = './videoConexaoAndroid.mp4'; // Caminho para salvar o vídeo localmente
 
             try {
                 await downloadVideo(videoUrl, filePath);
@@ -87,7 +99,7 @@ client.on('message', async (message) => {
                 // Enviar o vídeo pelo WhatsApp
                 const media = MessageMedia.fromFilePath(filePath);
                 await client.sendMessage(message.from, media, {
-                    caption: 'Vídeo ensinando como conectar no aplicativo!',
+                    caption: 'Vídeo ensinando como conectar no aplicativo!'
                 });
                 console.log('Vídeo enviado com sucesso!');
             } catch (error) {
