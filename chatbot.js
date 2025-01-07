@@ -202,4 +202,11 @@ client.on('message', async (message) => {
             await downloadFile('https://drive.google.com/uc?export=download&id=1B30tef3Ic9lImJy6J_EadmjwlhOUcJcd', videoPath);
 
             // Enviar o vídeo para o WhatsApp
-           
+            const videoMedia = MessageMedia.fromFilePath(videoPath);
+            await client.sendMessage(message.from, videoMedia, { caption: 'Aqui está o vídeo tutorial sobre como conectar.' });
+            break;
+    }
+});
+
+// Inicializar o cliente
+client.initialize();
