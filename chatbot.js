@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer-core');
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
+const axios = require('axios');
 
 // Armazenando as opções e respostas
 let options = {};
@@ -19,6 +20,21 @@ const client = new Client({
     },
 });
 
+// Função para baixar vídeo
+async function downloadVideo(url, filePath) {
+    const writer = fs.createWriteStream(filePath);
+    const response = await axios({
+        url,
+        method: 'GET',
+        responseType: 'stream',
+    });
+    response.data.pipe(writer);
+    return new Promise((resolve, reject) => {
+        writer.on('finish', resolve);
+        writer.on('error', reject);
+    });
+}
+
 // Gerar o QR Code para autenticação
 client.on('qr', (qr) => {
     qrcode.generate(qr, { small: true });
@@ -33,10 +49,10 @@ client.on('ready', () => {
 // Lidar com as mensagens recebidas no WhatsApp
 client.on('message', async (message) => {
     console.log('Mensagem recebida:', message.body);
-    
+
     // Verificando se a mensagem recebida é uma das perguntas armazenadas
     const response = options[message.body];
-    
+
     if (response) {
         // Respondendo com a resposta associada
         message.reply(response);
@@ -57,30 +73,28 @@ client.on('message', async (message) => {
                 '4 - Fazer teste no IPhone\n' +
                 '5 - Como aderir\n' +
                 '6 - Outras perguntas\n' +
-                '7 - Receber imagem informativa'
+                '7 - Receber imagem informativa\n' +
+                '8 - Baixar e enviar vídeo informativo'
             );
-        } else if (message.body === '3') {
-            // Resposta para "Fazer teste no Android"
-            await message.reply(options['Fazer teste no Android']);
-            console.log('Resposta 1 enviada: ', options['Fazer teste no Android']);
-
-            // Caminho correto da imagem
-            const imagePath = '/home/container/video/Captura de tela 2025-01-06 180506.png'; // Caminho atualizado para a imagem
+        } else if (message.body === '8') {
+            // Baixar e enviar o vídeo
+            const videoUrl = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F'; // Link para download direto
+            const filePath = './videoInformativo.mp4'; // Caminho para salvar o vídeo localmente
 
             try {
-                // Enviar a imagem junto com as respostas
-                await message.reply(
-                    'Aqui está a imagem com as instruções de como conectar no aplicativo.', // Mensagem de texto opcional
-                    { media: fs.createReadStream(imagePath) } // Enviar o arquivo de imagem
-                );
-                console.log('Imagem enviada com sucesso!');
-            } catch (error) {
-                console.error('Erro ao enviar a imagem:', error);
-            }
+                await message.reply('Baixando o vídeo, aguarde...');
+                await downloadVideo(videoUrl, filePath);
 
-            // Terceira resposta
-            await message.reply(options['Fazer teste no Android - imagem']);
-            console.log('Resposta 3 enviada: ', options['Fazer teste no Android - imagem']);
+                // Enviar o vídeo pelo WhatsApp
+                const media = MessageMedia.fromFilePath(filePath);
+                await client.sendMessage(message.from, media, {
+                    caption: 'Aqui está o vídeo informativo!',
+                });
+                console.log('Vídeo enviado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao baixar ou enviar o vídeo:', error);
+                await message.reply('Ocorreu um erro ao tentar baixar ou enviar o vídeo.');
+            }
         }
     }
 });
@@ -139,7 +153,6 @@ options['Valores dos planos'] = `### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*
 ======================`;
 
 options['Fazer teste no Android'] = 'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.';
-options['Fazer teste no Android - imagem'] = '👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções de conexão: Abra o aplicativo com o seu Wi-Fi ligado. Após abrir o aplicativo, desligue o Wi-Fi e ligue os seus dados móveis. Certifique-se de que apareça a indicação de 3G, H+, 4G ou 5G. Insira o usuário e senha acima, escolha a opção correspondente à sua operadora e clique em conectar. Aguarde 15 segundos. Se não funcionar, teste todas as opções disponíveis para a sua operadora no aplicativo.';
 
 // Iniciar o cliente
 client.initialize();
