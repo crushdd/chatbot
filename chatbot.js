@@ -89,6 +89,9 @@ client.on('message', async (message) => {
             const chat = await message.getChat();
 
             await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+            await client.sendMessage(message.from, 'Por favor, *INSTALE* este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro e abra-o com o Wi-Fi ligado.');
+
+            await simulateTyping(chat, 3000); // Pausa antes de enviar o usuário e senha
             await client.sendMessage(message.from, '👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções de conexão: Abra o aplicativo com o seu Wi-Fi ligado. Após abrir o aplicativo, desligue o Wi-Fi e ligue os seus dados móveis. Certifique-se de que apareça a indicação de 3G, H+, 4G ou 5G. Insira o usuário e senha acima, escolha a opção correspondente à sua operadora e clique em conectar. Aguarde 15 segundos. Se não funcionar, teste todas as opções disponíveis para a sua operadora no aplicativo.');
 
             await simulateTyping(chat, 3000); // Pausa antes de enviar o vídeo
