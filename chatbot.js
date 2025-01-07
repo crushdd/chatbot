@@ -165,7 +165,7 @@ options['Valores dos planos'] = `### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*
 
 ======================`;
 
-options['Fazer teste no Android'] = 'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.';
+options['Fazer teste no Android 3'] = 'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.';
 
 // Iniciar o cliente
 client.initialize();
