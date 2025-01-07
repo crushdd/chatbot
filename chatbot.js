@@ -126,7 +126,7 @@ client.on('message', async (message) => {
             await simulateTyping(chat, 3500); // Pausa antes de enviar a próxima mensagem
             await client.sendMessage(
                 message.from,
-                'Em qual operadora você gostaria de testar? Para testar, *digite vivo* iphone ou *tim iphone*, de acordo com a sua operadora.'
+                'Em qual operadora você gostaria de testar? Para testar, digite *vivo iphone* ou *tim iphone*, de acordo com a sua operadora.'
             );
 
             // Aguardar a resposta do cliente
