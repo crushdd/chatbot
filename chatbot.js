@@ -166,12 +166,6 @@ client.on('message', async (message) => {
                         response.from,
                         `Aqui está o vídeo tutorial para TIM no iPhone:\n${timFileLink}`
                     );
-                } else {
-                    await simulateTyping(chat, 2000);
-                    await client.sendMessage(
-                        response.from,
-                        'Desculpe, atualmente só temos suporte para Vivo e TIM. Por favor, escolha uma dessas operadoras.'
-                    );
                 }
             });
             break;
@@ -209,8 +203,6 @@ client.on('message', async (message) => {
             await client.sendMessage(message.from, mediaVideo, { caption: 'Aqui está o vídeo tutorial!' });
             break;
         default:
-            await simulateTyping(chat, 2000);
-            await message.reply('Desculpe, não entendi sua resposta. Por favor, digite uma opção válida.');
             break;
     }
 });
