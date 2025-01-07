@@ -147,25 +147,28 @@ client.on('message', async (message) => {
                     await simulateTyping(chat, 3500); // Simula pausa antes de enviar
                     await client.sendMessage(
                         response.from,
-                        `Aqui está o vídeo tutorial para conectar na Vivo no iPhone:\n${vivoFileLink}`
+                        `Aqui está o vídeo tutorial para conectar na Vivo no iPhone!`
                     );
+                    
+                    // Baixar e enviar o vídeo da Vivo diretamente
+                    const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+                    const vivoVideoPath = path.join(__dirname, 'vivo_tutorial_video.mp4');
+                    await downloadFile(vivoVideoLink, vivoVideoPath);
+
+                    const vivoMedia = MessageMedia.fromFilePath(vivoVideoPath);
+                    await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
+
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 3000);
 
                     // Links para os arquivos no Google Drive
-                    const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
-                    const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
+                    const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+                    const timVideoPath = path.join(__dirname, 'tim_tutorial_video.mp4'); // Caminho para salvar o vídeo
 
-                    await downloadFile(timFileLink, timFilePath); // Baixar arquivo do link
+                    await downloadFile(timVideoLink, timVideoPath); // Baixar vídeo do link
 
-                    const media = MessageMedia.fromFilePath(timFilePath);
-                    await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
-
-                    await simulateTyping(chat, 3500); // Simula pausa antes de enviar
-                    await client.sendMessage(
-                        response.from,
-                        `Aqui está o vídeo tutorial para conectar na TIM no iPhone:\n${timFileLink}`
-                    );
+                    const timMedia = MessageMedia.fromFilePath(timVideoPath);
+                    await client.sendMessage(response.from, timMedia, { caption: 'Aqui está o vídeo tutorial para conectar na TIM no iPhone!' });
                 }
             });
             break;
@@ -199,13 +202,4 @@ client.on('message', async (message) => {
             await downloadFile('https://drive.google.com/uc?export=download&id=1B30tef3Ic9lImJy6J_EadmjwlhOUcJcd', videoPath);
 
             // Enviar o vídeo para o WhatsApp
-            const mediaVideo = MessageMedia.fromFilePath(videoPath);
-            await client.sendMessage(message.from, mediaVideo, { caption: 'Aqui está o vídeo tutorial!' });
-            break;
-        default:
-            break;
-    }
-});
-
-// Iniciar o cliente do WhatsApp
-client.initialize();
+           
