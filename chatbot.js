@@ -223,12 +223,12 @@ client.on('message', async (message) => {
                 await message.reply('Imagem informativa não encontrada no momento.');
             }
             break;
-        case '8':
+        case '3':
             const videoUrl = 'https://bit.ly/appandroidbo';
             const filePath = './videoInformativo.mp4';
 
             try {
-                await simulateTyping(chat, 2000);
+                await simulateTyping(chat, 4500);
                 await downloadVideo(videoUrl, filePath);
 
                 const media = MessageMedia.fromFilePath(filePath);
