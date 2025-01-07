@@ -103,15 +103,68 @@ client.on('message', async (message) => {
             );
             break;
         case '4':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 3000);
             await client.sendMessage(
                 message.from,
                 'Por favor, *BAIXE* este aplicativo: https://apps.apple.com/app/napsternetv/id1629465476.'
-		    await simulateTyping(chat, 3000); // Pausa antes de enviar a próxima mensagem
+            );
+            await simulateTyping(chat, 3500); // Pausa antes de enviar a próxima mensagem
             await client.sendMessage(
                 message.from,
-                'Você gostaria de testar em qual operadora? Atualmente, os testes estão disponíveis apenas para Vivo e TIM.'
+                'Em qual operadora você gostaria de testar? Para testar, *digite vivo* iphone ou *tim iphone*, de acordo com a sua operadora.'
             );
+
+            // Aguardar a resposta do cliente
+            client.on('message', async (response) => {
+                const userReply = response.body.toLowerCase();
+
+                // Caso o usuário mencione "claro iphone"
+                if (userReply.includes('claro') && userReply.includes('iphone')) {
+                    await simulateTyping(chat, 2000);
+                    await client.sendMessage(
+                        response.from,
+                        'Desculpe, atualmente só temos suporte para Vivo e TIM. Por favor, escolha uma dessas operadoras.'
+                    );
+                } else if (userReply.includes('vivo') && userReply.includes('iphone')) {
+                    await simulateTyping(chat, 2000);
+
+                    // Links para os arquivos no Google Drive
+                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
+                    const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+
+                    await client.sendMessage(
+                        response.from,
+                        `Aqui está o arquivo de configuração para Vivo no iPhone:\n${vivoFileLink}`
+                    );
+                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar o vídeo
+                    await client.sendMessage(
+                        response.from,
+                        `Aqui está o vídeo tutorial para Vivo no iPhone:\n${vivoVideoLink}`
+                    );
+                } else if (userReply.includes('tim') && userReply.includes('iphone')) {
+                    await simulateTyping(chat, 2000);
+
+                    // Links para os arquivos no Google Drive
+                    const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
+                    const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+
+                    await client.sendMessage(
+                        response.from,
+                        `Aqui está o arquivo de configuração para TIM no iPhone:\n${timFileLink}`
+                    );
+                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar o vídeo
+                    await client.sendMessage(
+                        response.from,
+                        `Aqui está o vídeo tutorial para TIM no iPhone:\n${timVideoLink}`
+                    );
+                } else {
+                    await simulateTyping(chat, 2000);
+                    await client.sendMessage(
+                        response.from,
+                        'Desculpe, atualmente só temos suporte para Vivo e TIM. Por favor, escolha uma dessas operadoras.'
+                    );
+                }
+            });
             break;
         case '5':
             await simulateTyping(chat, 2000);
