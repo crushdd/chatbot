@@ -1,14 +1,10 @@
 const puppeteer = require('puppeteer-core');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const readline = require('readline');
 const fs = require('fs');
 
 // Armazenando as opções e respostas
 let options = {};
-
-// Função de delay para aguardar um tempo
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // Configuração do WhatsApp Web
 const client = new Client({
@@ -50,7 +46,6 @@ client.on('message', async (message) => {
         if (message.body.match(/(menu|Menu|oi|Oi|Olá|olá|ola|Ola)/i)) {
             const chat = await message.getChat();
             await chat.sendStateTyping(); // Simulando Digitação
-            await delay(3000); // Delay de 3 segundos
             const contact = await message.getContact(); // Pegando o contato
             const name = contact.pushname; // Pegando o nome do contato
             await client.sendMessage(
@@ -69,14 +64,11 @@ client.on('message', async (message) => {
             await message.reply(options['Fazer teste no Android']);
             console.log('Resposta 1 enviada: ', options['Fazer teste no Android']);
 
-            // Aguardar 5 segundos antes de enviar a imagem
-            await delay(5000);
-
             // Caminho correto da imagem
             const imagePath = '/home/container/video/Captura de tela 2025-01-06 180506.png'; // Caminho atualizado para a imagem
 
             try {
-                // Enviar a imagem
+                // Enviar a imagem junto com as respostas
                 await message.reply(
                     'Aqui está a imagem com as instruções de como conectar no aplicativo.', // Mensagem de texto opcional
                     { media: fs.createReadStream(imagePath) } // Enviar o arquivo de imagem
