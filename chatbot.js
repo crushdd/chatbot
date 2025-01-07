@@ -103,7 +103,7 @@ client.on('message', async (message) => {
                 '👤 Usuário: 4000\n🔑 Senha: 4000\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
             );
             await simulateTyping(chat, 3150);
-            
+
             // Agora, o vídeo será baixado e enviado diretamente
             const videoLink = 'https://drive.google.com/uc?export=download&id=1B30tef3Ic9lImJy6J_EadmjwlhOUcJcd';
             const videoFilePath = path.join(__dirname, 'tutorial_video.mp4'); // Caminho para salvar o vídeo
@@ -112,7 +112,7 @@ client.on('message', async (message) => {
 
             // Enviar o vídeo para a conversa
             const media = MessageMedia.fromFilePath(videoFilePath); // Criar o objeto de mídia
-            await client.sendMessage(message.from, media, { caption: 'Video ensinando como conectar no aplicativo!' });
+            await client.sendMessage(message.from, media, { caption: 'Vídeo ensinando como conectar no aplicativo!' });
 
             break;
         case '4':
@@ -149,39 +149,38 @@ client.on('message', async (message) => {
                         response.from,
                         `Aqui está o vídeo tutorial para conectar na Vivo no iPhone!`
                     );
-                    
+
                     // Baixar e enviar o vídeo da Vivo diretamente
                     const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
                     const vivoVideoPath = path.join(__dirname, 'vivo_tutorial_video.mp4');
-                    await downloadFile(vivoVideoLink, vivoVideoPath);
 
+                    await downloadFile(vivoVideoLink, vivoVideoPath);
                     const vivoMedia = MessageMedia.fromFilePath(vivoVideoPath);
                     await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
-
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 3000);
 
-                    // Links para os arquivos no Google Drive
+                    try {
+                        // Links para os arquivos no Google Drive
+                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
+                        const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo .inpv
 
-                } else if (userReply.includes('tim') && userReply.includes('iphone')) {
-                    await simulateTyping(chat, 3000);
+                        // Baixar e enviar o arquivo de configuração
+                        await downloadFile(timFileLink, timFilePath);
+                        const media = MessageMedia.fromFilePath(timFilePath);
+                        await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
 
-                    // Links para os arquivos no Google Drive
-                    const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
-                    const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
+                        // Link para o vídeo tutorial
+                        const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+                        const timVideoPath = path.join(__dirname, 'tim_tutorial_video.mp4'); // Caminho para salvar o vídeo
 
-                    await downloadFile(timFileLink, timFilePath); // Baixar arquivo do link
-
-                    const media = MessageMedia.fromFilePath(timFilePath);
-                    await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
-
-                    const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
-                    const timVideoPath = path.join(__dirname, 'tim_tutorial_video.mp4'); // Caminho para salvar o vídeo
-
-                    await downloadFile(timVideoLink, timVideoPath); // Baixar vídeo do link
-
-                    const timMedia = MessageMedia.fromFilePath(timVideoPath);
-                    await client.sendMessage(response.from, timMedia, { caption: 'Aqui está o vídeo tutorial para conectar na TIM no iPhone!' });
+                        // Baixar e enviar o vídeo tutorial
+                        await downloadFile(timVideoLink, timVideoPath);
+                        const timMedia = MessageMedia.fromFilePath(timVideoPath);
+                        await client.sendMessage(response.from, timMedia, { caption: 'Aqui está o vídeo tutorial para conectar na TIM no iPhone!' });
+                    } catch (err) {
+                        console.error('Erro ao processar o arquivo ou vídeo:', err);
+                    }
                 }
             });
             break;
@@ -201,25 +200,27 @@ client.on('message', async (message) => {
             const imagePath = './imagemInformativa.png'; // Substitua pelo caminho da imagem
             if (fs.existsSync(imagePath)) {
                 const media = MessageMedia.fromFilePath(imagePath);
-                await client.sendMessage(message.from, media, {
-                    caption: 'Imagem informativa sobre nossos planos e serviços.'
-                });
+                await client.sendMessage(message.from, media, { caption: 'Aqui está a imagem informativa!' });
             } else {
-                await message.reply('Imagem informativa não encontrada no momento.');
+                await message.reply('Desculpe, a imagem informativa não foi encontrada.');
             }
             break;
         case '8':
             await simulateTyping(chat, 2000);
-            const videoPath = path.join(__dirname, 'tutorial_video.mp4'); // Caminho para salvar o vídeo
-
-            await downloadFile('https://drive.google.com/uc?export=download&id=1B30tef3Ic9lImJy6J_EadmjwlhOUcJcd', videoPath);
-
-            // Enviar o vídeo para o WhatsApp
-            const videoMedia = MessageMedia.fromFilePath(videoPath);
-            await client.sendMessage(message.from, videoMedia, { caption: 'Aqui está o vídeo tutorial sobre como conectar.' });
+            const videoPath = './videoInformativo.mp4'; // Substitua pelo caminho do vídeo
+            if (fs.existsSync(videoPath)) {
+                const media = MessageMedia.fromFilePath(videoPath);
+                await client.sendMessage(message.from, media, { caption: 'Aqui está o vídeo informativo!' });
+            } else {
+                await message.reply('Desculpe, o vídeo informativo não foi encontrado.');
+            }
+            break;
+        default:
+            await simulateTyping(chat, 1500);
+            await message.reply('Desculpe, não entendi sua mensagem. Por favor, digite "menu" para começar.');
             break;
     }
 });
 
-// Inicializar o cliente
+// Inicializar cliente WhatsApp
 client.initialize();
