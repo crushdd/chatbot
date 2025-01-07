@@ -56,116 +56,86 @@ client.on('ready', () => {
 client.on('message', async (message) => {
     console.log('Mensagem recebida:', message.body);
 
-    // Verificando se a mensagem recebida é uma das perguntas armazenadas
-    const response = options[message.body];
+    const chat = await message.getChat();
+    const contact = await message.getContact();
+    const name = contact.pushname;
 
-    if (response) {
-        // Respondendo com a resposta associada
-        const chat = await message.getChat();
+    // Exibindo o menu quando o usuário digitar 'menu' ou saudação
+    if (message.body.match(/(menu|Menu|oi|Oi|Olá|olá|ola|Ola)/i)) {
         await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
-        message.reply(response);
-        console.log('Resposta enviada:', response);
-    } else {
-        // Enviando o menu se a mensagem for de saudação ou pedido de menu
-        if (message.body.match(/(menu|Menu|oi|Oi|Olá|olá|ola|Ola)/i)) {
-            const chat = await message.getChat();
-            await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
-            const contact = await message.getContact(); // Pegando o contato
-            const name = contact.pushname; // Pegando o nome do contato
-            await client.sendMessage(
-                message.from,
-                'Olá! ' + name.split(' ')[0] + ', sou o assistente virtual da empresa tal. Como posso ajudá-lo hoje? Por favor, digite uma das opções abaixo:\n\n' +
-                '1 - Como funciona\n' +
-                '2 - Valores dos planos\n' +
-                '3 - Fazer teste no Android\n' +
-                '4 - Fazer teste no IPhone\n' +
-                '5 - Como aderir\n' +
-                '6 - Outras perguntas\n' +
-                '7 - Receber imagem informativa\n' +
-                '8 - Baixar e enviar vídeo informativo'
-            );
-        } else if (message.body === '3') {
-            // Resposta para a opção 3
-            const chat = await message.getChat();
+        await client.sendMessage(
+            message.from,
+            'Olá! ' + name.split(' ')[0] + ', sou o assistente virtual da empresa tal. Como posso ajudá-lo hoje? Por favor, digite uma das opções abaixo:\n\n' +
+            '1 - Como funciona\n' +
+            '2 - Valores dos planos\n' +
+            '3 - Fazer teste no Android\n' +
+            '4 - Fazer teste no IPhone\n' +
+            '5 - Como aderir\n' +
+            '6 - Outras perguntas\n' +
+            '7 - Receber imagem informativa\n' +
+            '8 - Baixar e enviar vídeo informativo'
+        );
+    } else if (message.body === '1') {
+        // Resposta para a opção 1
+        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+        await client.sendMessage(message.from, 'Disponibilizamos a internet ilimitada por meio do nosso aplicativo. Basta baixá-lo, fazer login com o acesso iremos fornecer, e conectar. Enquanto você mantiver o aplicativo aberto e conectado, terá acesso à internet ilimitada.');
+    } else if (message.body === '2') {
+        // Resposta para a opção 2
+        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+        await client.sendMessage(message.from, '### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*\n\n====================== \n*Plano Mensal:* R$25,00 /mês  30 dias de internet ilimitada (sem acesso para rotear para TV/computador/celular)\n\n-------------------------------------------------\n*Plano Bronze* 🥉 3 Meses de internet ilimitada por: *R$69,90*  (Ficam apenas R$23,30 por mês)\n\n-------------------------------------------------\n*Plano Prata* 🥈 6 Meses de internet ilimitada por: *R$129,90*  (Ficam apenas R$21,65 por mês) + 1 Mês de Bônus (Pague 6 e Leve 7 meses)\n\n-------------------------------------------------\n*Plano Ouro* 🥇 12 Meses de internet ilimitada por: *R$226,90*  (Ficam apenas R$18,90 por mês) + 2 Meses de Bônus (Pague 12 e Leve 14 meses)\n\n======================\n\n### *PLANOS COM ACESSO PARA ROTEAR INTERNET:*\n*(DISPONIVEL APENAS PARA PLANOS COMPRADOS PARA ANDROID)*\n\n====================== \n*Plano Mensal:* R$35,00 /mês  30 dias de internet ilimitada + roteamento ilimitado para TV/computador/celular\n\n-------------------------------------------------\n*Plano Bronze* 🥉 3 Meses de internet ilimitada + roteamento por: *R$95,00*  (Ficam apenas R$31,67 por mês)\n\n-------------------------------------------------\n*Plano Prata* 🥈 6 Meses de internet ilimitada + roteamento por: *R$180,00*  (Ficam apenas R$30,00 por mês) + 1 Mês de Bônus (Pague 6 e Leve 7 meses)\n\n-------------------------------------------------\n*Plano Ouro* 🥇 12 Meses de internet ilimitada + roteamento por: *R$330,00*  (Ficam apenas R$27,50 por mês) + 2 Meses de Bônus (Pague 12 e Leve 14 meses)\n\n======================');
+    } else if (message.body === '3') {
+        // Resposta para a opção 3
+        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+        await client.sendMessage(message.from, 'Por favor, *INSTALE* este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro e abra-o com o Wi-Fi ligado.\n\n' +
+            'Aqui estão os dados para acesso:\n\n' +
+            '👤 Usuário: 5120\n' +
+            '🔑 Senha: 5120\n' +
+            '📲 Limite: 1\n' +
+            '🗓️ Expira em: 24 horas\n\n' +
+            'Após instalar o aplicativo, abra-o com o Wi-Fi ligado. Em seguida, insira o usuário e senha fornecidos, escolha a operadora e clique em conectar. Aguarde até 15 segundos para a conexão ser estabelecida.\n\n');
+        
+        // Baixando e enviando o vídeo
+        await simulateTyping(chat, 3000); // Pausa antes de enviar o vídeo
+        const videoUrl = 'https://drive.google.com/uc?id=1EQCmyXCgM3tBd7ETbL5U8k89ffvArPw-&export=download'; // Link para download direto
+        const filePath = './videoInformativo.mp4'; // Caminho para salvar o vídeo localmente
 
-            await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
-            await client.sendMessage(message.from, '👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções de conexão: Abra o aplicativo com o seu Wi-Fi ligado. Após abrir o aplicativo, desligue o Wi-Fi e ligue os seus dados móveis. Certifique-se de que apareça a indicação de 3G, H+, 4G ou 5G. Insira o usuário e senha acima, escolha a opção correspondente à sua operadora e clique em conectar. Aguarde 15 segundos. Se não funcionar, teste todas as opções disponíveis para a sua operadora no aplicativo.');
-
-            await simulateTyping(chat, 3000); // Pausa antes de enviar o vídeo
-            const videoUrl = 'https://drive.google.com/uc?id=1EQCmyXCgM3tBd7ETbL5U8k89ffvArPw-&export=download'; // Link para download direto
-            const filePath = './videoInformativo.mp4'; // Caminho para salvar o vídeo localmente
-
-            try {
-                await downloadVideo(videoUrl, filePath);
-
-                // Enviar o vídeo pelo WhatsApp
-                const media = MessageMedia.fromFilePath(filePath);
-                await client.sendMessage(message.from, media, {
-                    caption: 'Vídeo ensinando como conectar no aplicativo!'
-                });
-                console.log('Vídeo enviado com sucesso!');
-            } catch (error) {
-                console.error('Erro ao baixar ou enviar o vídeo:', error);
-                await message.reply('Ocorreu um erro ao tentar baixar ou enviar o vídeo.');
-            }
+        try {
+            await downloadVideo(videoUrl, filePath);
+            
+            // Enviar o vídeo pelo WhatsApp
+            const media = MessageMedia.fromFilePath(filePath);
+            await client.sendMessage(message.from, media, {
+                caption: 'Vídeo ensinando como conectar no aplicativo!'
+            });
+            console.log('Vídeo enviado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao baixar ou enviar o vídeo:', error);
+            await message.reply('Ocorreu um erro ao tentar baixar ou enviar o vídeo.');
         }
+    } else if (message.body === '4') {
+        // Resposta para a opção 4
+        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+        await client.sendMessage(message.from, 'Por favor, _*INSTALE*_ este aplicativo: https://apps.apple.com/us/app/...');
+    } else if (message.body === '5') {
+        // Resposta para a opção 5
+        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+        await client.sendMessage(message.from, 'Você pode aderir aos nossos planos diretamente pelo nosso aplicativo ou entrando em contato com nosso suporte.');
+    } else if (message.body === '6') {
+        // Resposta para a opção 6
+        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+        await client.sendMessage(message.from, 'Se você tiver qualquer outra dúvida, por favor, nos avise!');
+    } else if (message.body === '7') {
+        // Resposta para a opção 7
+        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+        await client.sendMessage(message.from, 'Aqui está a imagem informativa que você solicitou.');
+        // Enviar imagem informativa aqui (adicionar código para enviar imagem)
+    } else if (message.body === '8') {
+        // Resposta para a opção 8
+        await simulateTyping(chat, 2000); // Simulando digitação por 2 segundos
+        await client.sendMessage(message.from, 'Aqui está o vídeo informativo que você solicitou!');
+        // Enviar vídeo informativo aqui (adicionar código para enviar vídeo)
     }
 });
-
-// Respostas armazenadas
-options['Como funciona'] = 'Disponibilizamos a internet ilimitada por meio do nosso aplicativo. Basta baixá-lo, fazer login com o acesso iremos fornecer, e conectar. Enquanto você mantiver o aplicativo aberto e conectado, terá acesso à internet ilimitada.';
-options['Valores dos planos'] = `### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*
-
-====================== 
-*Plano Mensal:* R$25,00 /mês  
-30 dias de internet ilimitada (sem acesso para rotear para TV/computador/celular)
-
--------------------------------------------------
-*Plano Bronze* 🥉  
-3 Meses de internet ilimitada por: *R$69,90*  
-(Ficam apenas R$23,30 por mês)
-
--------------------------------------------------
-*Plano Prata* 🥈  
-6 Meses de internet ilimitada por: *R$129,90*  
-(Ficam apenas R$21,65 por mês)  
-+ 1 Mês de Bônus (Pague 6 e Leve 7 meses)
-
--------------------------------------------------
-*Plano Ouro* 🥇  
-12 Meses de internet ilimitada por: *R$226,90*  
-(Ficam apenas R$18,90 por mês)  
-+ 2 Meses de Bônus (Pague 12 e Leve 14 meses)
-
-======================
-
-### *PLANOS COM ACESSO PARA ROTEAR INTERNET:*
-*(DISPONIVEL APENAS PARA PLANOS COMPRADOS PARA ANDROID)*
-
-====================== 
-*Plano Mensal:* R$35,00 /mês  
-30 dias de internet ilimitada + roteamento ilimitado para TV/computador/celular
-
--------------------------------------------------
-*Plano Bronze* 🥉  
-3 Meses de internet ilimitada + roteamento por: *R$95,00*  
-(Ficam apenas R$31,67 por mês)
-
--------------------------------------------------
-*Plano Prata* 🥈  
-6 Meses de internet ilimitada + roteamento por: *R$180,00*  
-(Ficam apenas R$30,00 por mês)  
-+ 1 Mês de Bônus (Pague 6 e Leve 7 meses)
-
--------------------------------------------------
-*Plano Ouro* 🥇  
-12 Meses de internet ilimitada + roteamento por: *R$330,00*  
-(Ficam apenas R$27,50 por mês)  
-+ 2 Meses de Bônus (Pague 12 e Leve 14 meses)
-
-======================`;
-
-options['Fazer teste no Android 3'] = 'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.';
 
 // Iniciar o cliente
 client.initialize();
