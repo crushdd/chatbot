@@ -1,30 +1,16 @@
-const puppeteer = require('puppeteer-core');
-const { Client, LocalAuth } = require('whatsapp-web.js');
-const qrcode = require('qrcode-terminal');
-const fs = require('fs');
+const { Client } = require('whatsapp-web.js');
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
+const client = new Client();
 
-// Configuração do WhatsApp Web
-const client = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-        headless: true,
-        executablePath: '/usr/bin/google-chrome-stable',
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-        ],
-    },
-});
-
-// Função para simular atraso
+// Função para adicionar delay
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // Respostas armazenadas
-const options = {};
-
-options['Como funciona'] = 'Disponibilizamos a internet ilimitada por meio do nosso aplicativo. Basta baixá-lo, fazer login com o acesso iremos fornecer, e conectar. Enquanto você mantiver o aplicativo aberto e conectado, terá acesso à internet ilimitada.';
-options['Valores dos planos'] = `### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*
+const options = {
+    'Como funciona': 'Disponibilizamos a internet ilimitada por meio do nosso aplicativo. Basta baixá-lo, fazer login com o acesso iremos fornecer, e conectar. Enquanto você mantiver o aplicativo aberto e conectado, terá acesso à internet ilimitada.',
+    'Valores dos planos': `### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*
 
 ====================== 
 *Plano Mensal:* R$25,00 /mês  
@@ -73,30 +59,28 @@ options['Valores dos planos'] = `### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*
 (Ficam apenas R$27,50 por mês)  
 + 2 Meses de Bônus (Pague 12 e Leve 14 meses)
 
-======================`;
+======================`,
+    'Fazer teste no Android': 'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.',
+};
 
-options['Fazer teste no Android'] = 'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.';
-
-// Gerar o QR Code para autenticação
+// Lógica para iniciar o cliente WhatsApp
 client.on('qr', (qr) => {
-    qrcode.generate(qr, { small: true });
-    console.log('Escaneie o QR Code acima!');
+    console.log('QR Code recebido:', qr);
+    // Implemente o código para gerar o QR Code se necessário
 });
 
-// Após a conexão bem-sucedida
 client.on('ready', () => {
-    console.log('Tudo certo! WhatsApp conectado.');
+    console.log('Bot está pronto!');
 });
 
-// Lidar com as mensagens recebidas no WhatsApp
 client.on('message', async (message) => {
     console.log('Mensagem recebida:', message.body);
 
     const chat = await message.getChat();
     const contact = await message.getContact();
     const name = contact.pushname ? contact.pushname.split(' ')[0] : 'Usuário';
-    
-    // Simular digitando antes de responder
+
+    // Simulando a digitação antes de responder
     await chat.sendStateTyping();
     await delay(2000); // Atraso de 2 segundos
 
@@ -113,6 +97,10 @@ client.on('message', async (message) => {
             '6 - Outras perguntas\n' +
             '7 - Receber vídeo informativo'
         );
+    } else if (message.body === '1') {
+        await message.reply(options['Como funciona']);
+    } else if (message.body === '2') {
+        await message.reply(options['Valores dos planos']);
     } else if (message.body === '3') {
         // Quando o usuário escolhe "Fazer teste no Android" (opção 3)
         await chat.sendStateTyping();
@@ -144,6 +132,11 @@ client.on('message', async (message) => {
             console.error('Erro ao enviar o vídeo:', error);
             await client.sendMessage(message.from, 'Desculpe, houve um problema ao enviar o vídeo. Tente novamente mais tarde.');
         }
+    } else if (message.body === '7') {
+        // Enviar vídeo informativo
+        await chat.sendStateTyping();
+        await delay(2000); // Atraso de 2 segundos
+        await client.sendMessage(message.from, 'Aqui está o vídeo informativo:', { link: 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F' });
     } else {
         await chat.sendStateTyping();
         await delay(1500); // Atraso de 1.5 segundos
@@ -151,10 +144,4 @@ client.on('message', async (message) => {
     }
 });
 
-// Iniciar o cliente
 client.initialize();
-
-// Lidar com desconexões ou falhas
-client.on('disconnected', (reason) => {
-    console.log('Cliente desconectado. Razão:', reason);
-});
