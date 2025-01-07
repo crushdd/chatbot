@@ -64,37 +64,34 @@ client.on('message', async (message) => {
                 '6 - Outras perguntas\n' +
                 '7 - Receber vídeo informativo'
             );
+        } else if (message.body === '3') {
+            // Resposta para "Fazer teste no Android"
+            await message.reply(options['Fazer teste no Android']);
+            console.log('Resposta 1 enviada: ', options['Fazer teste no Android']);
+
+            // Aguardar 5 segundos antes de enviar o vídeo
+            await delay(5000);
+
+            // Caminho correto do vídeo
+            const videoPath = '/home/container/app.mp4'; // Caminho exato para o arquivo de vídeo
+
+            try {
+                // Enviar o vídeo
+                await message.reply(
+                    'Aqui está o vídeo com as instruções de como conectar no aplicativo.', // Mensagem de texto opcional
+                    { media: fs.createReadStream(videoPath) } // Enviar o arquivo de vídeo
+                );
+                console.log('Vídeo enviado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao enviar o vídeo:', error);
+            }
+
+            // Terceira resposta
+            await message.reply(options['Fazer teste no Android - vídeo']);
+            console.log('Resposta 3 enviada: ', options['Fazer teste no Android - vídeo']);
         }
     }
 });
-
-// Função para enviar múltiplas respostas com o vídeo
-const sendTestMessages = async (message) => {
-    // Primeira resposta
-    await message.reply(options['Fazer teste no Android']);
-    console.log('Resposta 1 enviada: ', options['Fazer teste no Android']);
-
-    // Aguardar 5 segundos antes de enviar as próximas respostas
-    await delay(5000);
-
-    // Caminho correto do vídeo
-    const videoPath = '/home/container/app.mp4'; // Caminho exato para o arquivo de vídeo
-
-    try {
-        // Enviar o vídeo
-        await message.reply(
-            'Como conectar no aplicativo.', // Mensagem de texto opcional
-            { media: fs.createReadStream(videoPath) } // Enviar o arquivo de vídeo
-        );
-        console.log('Vídeo enviado com sucesso!');
-    } catch (error) {
-        console.error('Erro ao enviar o vídeo:', error);
-    }
-
-    // Terceira resposta
-    await message.reply(options['Fazer teste no Android - vídeo']);
-    console.log('Resposta 3 enviada: ', options['Fazer teste no Android - vídeo']);
-};
 
 // Respostas armazenadas
 options['Como funciona'] = 'Disponibilizamos a internet ilimitada por meio do nosso aplicativo. Basta baixá-lo, fazer login com o acesso iremos fornecer, e conectar. Enquanto você mantiver o aplicativo aberto e conectado, terá acesso à internet ilimitada.';
