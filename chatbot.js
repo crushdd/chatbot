@@ -92,7 +92,7 @@ client.on('message', async (message) => {
             await client.sendMessage(message.from, '👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções de conexão: Abra o aplicativo com o seu Wi-Fi ligado. Após abrir o aplicativo, desligue o Wi-Fi e ligue os seus dados móveis. Certifique-se de que apareça a indicação de 3G, H+, 4G ou 5G. Insira o usuário e senha acima, escolha a opção correspondente à sua operadora e clique em conectar. Aguarde 15 segundos. Se não funcionar, teste todas as opções disponíveis para a sua operadora no aplicativo.');
 
             await simulateTyping(chat, 3000); // Pausa antes de enviar o vídeo
-            const videoUrl = 'https://drive.google.com/uc?id=1y0_2GJPW3mIh2Ei5-X2WWsZIXyJipXZL&export=download'; // Link para download direto
+            const videoUrl = 'https://drive.google.com/uc?id=1EQCmyXCgM3tBd7ETbL5U8k89ffvArPw-&export=download'; // Link para download direto
             const filePath = './videoInformativo.mp4'; // Caminho para salvar o vídeo localmente
 
             try {
