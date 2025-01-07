@@ -62,33 +62,33 @@ client.on('message', async (message) => {
                 '4 - Fazer teste no IPhone\n' +
                 '5 - Como aderir\n' +
                 '6 - Outras perguntas\n' +
-                '7 - Receber vídeo informativo'
+                '7 - Receber imagem informativa'
             );
         } else if (message.body === '3') {
             // Resposta para "Fazer teste no Android"
             await message.reply(options['Fazer teste no Android']);
             console.log('Resposta 1 enviada: ', options['Fazer teste no Android']);
 
-            // Aguardar 5 segundos antes de enviar o vídeo
+            // Aguardar 5 segundos antes de enviar a imagem
             await delay(5000);
 
-            // Caminho correto do vídeo
-            const videoPath = '/home/container/video/app.mp4'; // Caminho atualizado para o vídeo
+            // Caminho correto da imagem
+            const imagePath = '/home/container/video/Captura de tela 2025-01-06 180506.png'; // Caminho atualizado para a imagem
 
             try {
-                // Enviar o vídeo
+                // Enviar a imagem
                 await message.reply(
-                    'Aqui está o vídeo com as instruções de como conectar no aplicativo.', // Mensagem de texto opcional
-                    { media: fs.createReadStream(videoPath) } // Enviar o arquivo de vídeo
+                    'Aqui está a imagem com as instruções de como conectar no aplicativo.', // Mensagem de texto opcional
+                    { media: fs.createReadStream(imagePath) } // Enviar o arquivo de imagem
                 );
-                console.log('Vídeo enviado com sucesso!');
+                console.log('Imagem enviada com sucesso!');
             } catch (error) {
-                console.error('Erro ao enviar o vídeo:', error);
+                console.error('Erro ao enviar a imagem:', error);
             }
 
             // Terceira resposta
-            await message.reply(options['Fazer teste no Android - vídeo']);
-            console.log('Resposta 3 enviada: ', options['Fazer teste no Android - vídeo']);
+            await message.reply(options['Fazer teste no Android - imagem']);
+            console.log('Resposta 3 enviada: ', options['Fazer teste no Android - imagem']);
         }
     }
 });
@@ -147,7 +147,7 @@ options['Valores dos planos'] = `### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*
 ======================`;
 
 options['Fazer teste no Android'] = 'Por favor, _*INSTALE*_ este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro E _*abra-o*_ com o _*Wi-Fi ligado*_.';
-options['Fazer teste no Android - vídeo'] = '👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções de conexão: Abra o aplicativo com o seu Wi-Fi ligado. Após abrir o aplicativo, desligue o Wi-Fi e ligue os seus dados móveis. Certifique-se de que apareça a indicação de 3G, H+, 4G ou 5G. Insira o usuário e senha acima, escolha a opção correspondente à sua operadora e clique em conectar. Aguarde 15 segundos. Se não funcionar, teste todas as opções disponíveis para a sua operadora no aplicativo.';
+options['Fazer teste no Android - imagem'] = '👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções de conexão: Abra o aplicativo com o seu Wi-Fi ligado. Após abrir o aplicativo, desligue o Wi-Fi e ligue os seus dados móveis. Certifique-se de que apareça a indicação de 3G, H+, 4G ou 5G. Insira o usuário e senha acima, escolha a opção correspondente à sua operadora e clique em conectar. Aguarde 15 segundos. Se não funcionar, teste todas as opções disponíveis para a sua operadora no aplicativo.';
 
 // Iniciar o cliente
 client.initialize();
