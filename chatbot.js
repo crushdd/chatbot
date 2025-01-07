@@ -136,8 +136,8 @@ client.on('message', async (message) => {
                     await simulateTyping(chat, 2000);
 
                     // Links para os arquivos no Google Drive
-                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
-                    const vivoFilePath = path.join(__dirname, 'vivo_config_iphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
+                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1_Tpg6dPDs74Hp_ovHVfJ715dJairUwnY';
+                    const vivoFilePath = path.join(__dirname, 'vivoteste.npv4'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
 
