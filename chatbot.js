@@ -21,7 +21,7 @@ const client = new Client({
     },
 });
 
-// Função para baixar o vídeo
+// Função para baixar o arquivo
 async function downloadFile(url, filePath) {
     const writer = fs.createWriteStream(filePath);
     const response = await axios({
@@ -131,19 +131,13 @@ client.on('message', async (message) => {
             client.on('message', async (response) => {
                 const userReply = response.body.toLowerCase();
 
-                // Caso o usuário mencione "claro iphone"
-                if (userReply.includes('claro') && userReply.includes('iphone')) {
-                    await simulateTyping(chat, 2000);
-                    await client.sendMessage(
-                        response.from,
-                        'Desculpe, atualmente só temos suporte para Vivo e TIM. Por favor, escolha uma dessas operadoras.'
-                    );
-                } else if (userReply.includes('vivo') && userReply.includes('iphone')) {
+                // Caso o usuário mencione "vivo iphone"
+                if (userReply.includes('vivo') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 2000);
 
                     // Links para os arquivos no Google Drive
                     const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
-                    const vivoFilePath = path.join(__dirname, 'vivo_config_iphone.zip'); // Caminho para salvar o arquivo
+                    const vivoFilePath = path.join(__dirname, 'vivo_config_iphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
 
@@ -160,7 +154,7 @@ client.on('message', async (message) => {
 
                     // Links para os arquivos no Google Drive
                     const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
-                    const timFilePath = path.join(__dirname, 'tim_config_iphone.zip'); // Caminho para salvar o arquivo
+                    const timFilePath = path.join(__dirname, 'tim_config_iphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(timFileLink, timFilePath); // Baixar arquivo do link
 
@@ -215,17 +209,11 @@ client.on('message', async (message) => {
             await client.sendMessage(message.from, mediaVideo, { caption: 'Aqui está o vídeo tutorial!' });
             break;
         default:
+            await simulateTyping(chat, 2000);
+            await message.reply('Desculpe, não entendi sua resposta. Por favor, digite uma opção válida.');
             break;
     }
 });
 
-// Respostas armazenadas
-options['Valores dos planos'] = `### Planos disponíveis: [...]`; // Personalize os detalhes
-
-// Iniciar o cliente
+// Iniciar o cliente do WhatsApp
 client.initialize();
-
-// Lidar com desconexões ou falhas
-client.on('disconnected', (reason) => {
-    console.log('Cliente desconectado. Razão:', reason);
-});
