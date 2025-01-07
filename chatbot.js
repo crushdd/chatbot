@@ -133,7 +133,7 @@ client.on('message', async (message) => {
 
                 // Caso o usuário mencione "vivo iphone"
                 if (userReply.includes('vivo') && userReply.includes('iphone')) {
-                    await simulateTyping(chat, 2500);
+                    await simulateTyping(chat, 2000);
 
                     // Links para os arquivos no Google Drive
                     const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
@@ -144,7 +144,7 @@ client.on('message', async (message) => {
                     const media = MessageMedia.fromFilePath(vivoFilePath);
                     await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para Vivo no iPhone' });
 
-                    await simulateTyping(chat, 3500); // Simula pausa antes de enviar
+                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar
                     await client.sendMessage(
                         response.from,
                         `Aqui está o vídeo tutorial para conectar na Vivo no iPhone!`
@@ -162,6 +162,19 @@ client.on('message', async (message) => {
                     await simulateTyping(chat, 3000);
 
                     // Links para os arquivos no Google Drive
+
+                } else if (userReply.includes('tim') && userReply.includes('iphone')) {
+                    await simulateTyping(chat, 3000);
+
+                    // Links para os arquivos no Google Drive
+                    const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
+                    const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
+
+                    await downloadFile(timFileLink, timFilePath); // Baixar arquivo do link
+
+                    const media = MessageMedia.fromFilePath(timFilePath);
+                    await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
+
                     const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
                     const timVideoPath = path.join(__dirname, 'tim_tutorial_video.mp4'); // Caminho para salvar o vídeo
 
