@@ -3,6 +3,7 @@ const { Client, LocalAuth, MessageMedia } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const axios = require('axios');
+const path = require('path');
 
 // Armazenando as opções e respostas
 let options = {};
@@ -20,22 +21,7 @@ const client = new Client({
     },
 });
 
-// Função para baixar vídeo
-async function downloadVideo(url, filePath) {
-    const writer = fs.createWriteStream(filePath);
-    const response = await axios({
-        url,
-        method: 'GET',
-        responseType: 'stream',
-    });
-    response.data.pipe(writer);
-    return new Promise((resolve, reject) => {
-        writer.on('finish', resolve);
-        writer.on('error', reject);
-    });
-}
-
-// Função para baixar arquivo
+// Função para baixar o vídeo
 async function downloadFile(url, filePath) {
     const writer = fs.createWriteStream(filePath);
     const response = await axios({
@@ -116,6 +102,18 @@ client.on('message', async (message) => {
                 message.from,
                 '👤 Usuário: 5120\n🔑 Senha: 5120\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
             );
+            await simulateTyping(chat, 3000);
+            
+            // Agora, o vídeo será baixado e enviado diretamente
+            const videoLink = 'https://drive.google.com/uc?export=download&id=1B30tef3Ic9lImJy6J_EadmjwlhOUcJcd';
+            const videoFilePath = path.join(__dirname, 'tutorial_video.mp4'); // Caminho para salvar o vídeo
+
+            await downloadFile(videoLink, videoFilePath); // Baixar o vídeo
+
+            // Enviar o vídeo para a conversa
+            const media = MessageMedia.fromFilePath(videoFilePath); // Criar o objeto de mídia
+            await client.sendMessage(message.from, media, { caption: 'Aqui está o vídeo tutorial que você solicitou!' });
+
             break;
         case '4':
             await simulateTyping(chat, 3000);
@@ -143,54 +141,37 @@ client.on('message', async (message) => {
                 } else if (userReply.includes('vivo') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 2000);
 
-                    // Links para os arquivos e vídeo no Google Drive
+                    // Links para os arquivos no Google Drive
                     const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
-                    const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+                    const vivoFilePath = path.join(__dirname, 'vivo_config_iphone.zip'); // Caminho para salvar o arquivo
 
-                    // Baixando o arquivo e o vídeo
-                    const filePath = './vivoFile_iphone.zip';
-                    const videoPath = './vivoVideo_iphone.mp4';
+                    await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
 
-                    await downloadFile(vivoFileLink, filePath);
-                    await downloadVideo(vivoVideoLink, videoPath);
+                    const media = MessageMedia.fromFilePath(vivoFilePath);
+                    await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para Vivo no iPhone' });
 
-                    // Enviar o arquivo e o vídeo
-                    const fileMedia = MessageMedia.fromFilePath(filePath);
-                    const videoMedia = MessageMedia.fromFilePath(videoPath);
-
-                    await client.sendMessage(response.from, fileMedia, {
-                        caption: 'Arquivo de configuração para Vivo no iPhone'
-                    });
-                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar o vídeo
-                    await client.sendMessage(response.from, videoMedia, {
-                        caption: 'Vídeo tutorial para Vivo no iPhone'
-                    });
-
+                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar
+                    await client.sendMessage(
+                        response.from,
+                        `Aqui está o vídeo tutorial para Vivo no iPhone:\n${vivoFileLink}`
+                    );
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 2000);
 
-                    // Links para os arquivos e vídeo no Google Drive
+                    // Links para os arquivos no Google Drive
                     const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
-                    const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+                    const timFilePath = path.join(__dirname, 'tim_config_iphone.zip'); // Caminho para salvar o arquivo
 
-                    // Baixando o arquivo e o vídeo
-                    const timFilePath = './timFile_iphone.zip';
-                    const timVideoPath = './timVideo_iphone.mp4';
+                    await downloadFile(timFileLink, timFilePath); // Baixar arquivo do link
 
-                    await downloadFile(timFileLink, timFilePath);
-                    await downloadVideo(timVideoLink, timVideoPath);
+                    const media = MessageMedia.fromFilePath(timFilePath);
+                    await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
 
-                    // Enviar o arquivo e o vídeo
-                    const timFileMedia = MessageMedia.fromFilePath(timFilePath);
-                    const timVideoMedia = MessageMedia.fromFilePath(timVideoPath);
-
-                    await client.sendMessage(response.from, timFileMedia, {
-                        caption: 'Arquivo de configuração para TIM no iPhone'
-                    });
-                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar o vídeo
-                    await client.sendMessage(response.from, timVideoMedia, {
-                        caption: 'Vídeo tutorial para TIM no iPhone'
-                    });
+                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar
+                    await client.sendMessage(
+                        response.from,
+                        `Aqui está o vídeo tutorial para TIM no iPhone:\n${timFileLink}`
+                    );
                 } else {
                     await simulateTyping(chat, 2000);
                     await client.sendMessage(
@@ -223,27 +204,17 @@ client.on('message', async (message) => {
                 await message.reply('Imagem informativa não encontrada no momento.');
             }
             break;
-        case '3':
-            const videoUrl = 'https://bit.ly/appandroidbo';
-            const filePath = './videoInformativo.mp4';
+        case '8':
+            await simulateTyping(chat, 2000);
+            const videoPath = path.join(__dirname, 'tutorial_video.mp4'); // Caminho para salvar o vídeo
 
-            try {
-                await simulateTyping(chat, 4500);
-                await downloadVideo(videoUrl, filePath);
+            await downloadFile('https://drive.google.com/uc?export=download&id=1B30tef3Ic9lImJy6J_EadmjwlhOUcJcd', videoPath);
 
-                const media = MessageMedia.fromFilePath(filePath);
-                await client.sendMessage(message.from, media, {
-                    caption: 'Vídeo ensinando como conectar no aplicativo!'
-                });
-                console.log('Vídeo enviado com sucesso!');
-            } catch (error) {
-                console.error('Erro ao enviar vídeo:', error);
-                await message.reply('Ocorreu um erro ao tentar enviar o vídeo.');
-            }
+            // Enviar o vídeo para o WhatsApp
+            const mediaVideo = MessageMedia.fromFilePath(videoPath);
+            await client.sendMessage(message.from, mediaVideo, { caption: 'Aqui está o vídeo tutorial!' });
             break;
         default:
-            await simulateTyping(chat, 2000);
-            await message.reply('Não entendi sua mensagem. Por favor, digite "menu" para ver as opções disponíveis.');
             break;
     }
 });
