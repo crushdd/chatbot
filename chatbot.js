@@ -73,7 +73,7 @@ client.on('message', async (message) => {
             await delay(5000);
 
             // Caminho correto do vídeo
-            const videoPath = '/home/container/app.mp4'; // Caminho exato para o arquivo de vídeo
+            const videoPath = '/home/container/video/app.mp4'; // Caminho atualizado para o vídeo
 
             try {
                 // Enviar o vídeo
