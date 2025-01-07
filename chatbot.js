@@ -1,8 +1,20 @@
-const { Client } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
-const client = new Client();
+
+// Configuração do WhatsApp Web
+const client = new Client({
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        headless: true,
+        executablePath: '/usr/bin/google-chrome-stable', // Caminho para o navegador
+        args: [
+            '--no-sandbox', // Desativa o sandbox
+            '--disable-setuid-sandbox', // Desativa o setuid sandbox
+        ],
+    },
+});
 
 // Função para adicionar delay
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
