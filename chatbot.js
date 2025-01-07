@@ -1,17 +1,6 @@
 const qrcode = require('qrcode-terminal');
-const { Client, MessageMedia } = require('whatsapp-web.js'); 
-
-// Inicializando o cliente com a configuração do Puppeteer
-const client = new Client({
-    puppeteer: {
-        headless: true,
-        executablePath: "/usr/bin/google-chrome-stable",
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-        ],
-    },
-});
+const { Client } = require('whatsapp-web.js'); 
+const client = new Client();
 
 // Serviço de leitura do QR Code
 client.on('qr', qr => {
@@ -21,84 +10,48 @@ client.on('qr', qr => {
 // Conexão realizada com sucesso
 client.on('ready', () => {
     console.log('Tudo certo! WhatsApp conectado.');
+    showMenu();
 });
 
-// Inicializa tudo
-client.initialize();
+// Função para mostrar o menu após a conexão com sucesso
+async function showMenu() {
+    // Aguarda a inicialização completa do cliente antes de exibir o menu
+    const chat = await client.getChats();
+    await delay(2000); // Adiciona um pequeno atraso para garantir que a sessão foi estabelecida
 
-const delay = ms => new Promise(res => setTimeout(res, ms)); // Função para criar o delay entre uma ação e outra
+    // Após a inicialização, envia o menu
+    await client.sendMessage(
+        chat[0].id._serialized, 
+        'Escolha uma opção:\n' +
+        '1 - Adicionar nova opção\n' +
+        '2 - Deletar opção\n' +
+        '3 - Consultar respostas\n' +
+        '4 - Sair'
+    );
+}
+
+// Função para criar o delay entre ações
+const delay = ms => new Promise(res => setTimeout(res, ms)); 
 
 // Funil de mensagens
 client.on('message', async msg => {
-    // Identifica mensagens de saudação e envia o menu inicial
-    if (msg.body.match(/(menu|Menu|dia|tarde|noite|oi|Oi|Olá|olá|ola|Ola)/i) && msg.from.endsWith('@c.us')) {
-        const chat = await msg.getChat();
-        await delay(3000); // Delay de 3 segundos
-        await chat.sendStateTyping(); // Simulando Digitação
-        await delay(3000);
-        const contact = await msg.getContact(); // Pegando o contato
-        const name = contact.pushname; // Pegando o nome do contato
-        await client.sendMessage(
-            msg.from,
-            'Olá! ' +
-                name.split(' ')[0] +
-                ', sou o assistente virtual da empresa tal. Como posso ajudá-lo hoje? Por favor, digite uma das opções abaixo:\n\n' +
-                '1 - Como funciona\n' +
-                '2 - Valores dos planos\n' +
-                '3 - Fazer teste no Android\n' +
-                '4 - Fazer teste no IPhone\n' +				
-                '5 - Como aderir\n' +
-                '6 - Outras perguntas\n' +
-                '7 - Receber vídeo informativo' // Nova opção 7
-        );
-    }
-
-    // Responde com as informações para cada opção
-    if (msg.body === '1' && msg.from.endsWith('@c.us')) {
-        const chat = await msg.getChat();
-        await delay(3000);
-        await chat.sendStateTyping();
-        await delay(3000);
-        await client.sendMessage(msg.from, 'Disponibilizamos internet ilimitada por meio do nosso aplicativo. Basta baixá-lo, realizar a conexão com os dados que forneceremos e conectar. Enquanto o aplicativo estiver aberto e conectado, você terá acesso à internet ilimitada.');
-    }
-
-    if (msg.body === '2' && msg.from.endsWith('@c.us')) {
-        const chat = await msg.getChat();
-        await delay(3000);
-        await chat.sendStateTyping();
-        await delay(3000);
-        await client.sendMessage(msg.from, `Planos disponíveis...`); // Colocar suas informações de planos aqui
-    }
-
-    if (msg.body === '3' && msg.from.endsWith('@c.us')) {
-        const chat = await msg.getChat();
-        await delay(3000);
-        await chat.sendStateTyping();
-        await delay(3000);
-        await client.sendMessage(msg.from, 'Confira os benefícios para Android...');
-    }
-
-    if (msg.body === '4' && msg.from.endsWith('@c.us')) {
-        const chat = await msg.getChat();
-        await delay(3000);
-        await chat.sendStateTyping();
-        await delay(3000);
-        await client.sendMessage(msg.from, 'Para aderir, siga esses passos...');
-    }
-
-    if (msg.body === '5' && msg.from.endsWith('@c.us')) {
-        const chat = await msg.getChat();
-        await delay(3000);
-        await chat.sendStateTyping();
-        await delay(3000);
-        await client.sendMessage(msg.from, 'Outras perguntas? Estou aqui para ajudar!');
-    }
-
-    if (msg.body === '6' && msg.from.endsWith('@c.us')) {
-        const chat = await msg.getChat();
-        await delay(3000);
-        await chat.sendStateTyping();
-        await delay(3000);
-        await client.sendMessage(msg.from, 'Envio do vídeo informativo...');
+    // Identifica mensagens de menu e responde com as ações apropriadas
+    if (msg.body === '1') {
+        await msg.reply('Você selecionou a opção para adicionar uma nova opção.');
+        // Aqui você pode colocar a lógica para adicionar novas opções dinamicamente
+    } else if (msg.body === '2') {
+        await msg.reply('Você selecionou a opção para deletar uma opção.');
+        // Aqui você pode colocar a lógica para deletar opções
+    } else if (msg.body === '3') {
+        await msg.reply('Você selecionou a opção para consultar respostas.');
+        // Aqui você pode colocar a lógica para consultar respostas
+    } else if (msg.body === '4') {
+        await msg.reply('Você selecionou a opção para sair.');
+        // Lógica para encerrar ou fazer outro tipo de ação
+    } else {
+        await msg.reply('Escolha uma opção válida. Digite 1, 2, 3 ou 4.');
     }
 });
+
+// Inicializa o cliente do WhatsApp Web
+client.initialize();
