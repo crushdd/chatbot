@@ -1,4 +1,11 @@
 {
+  "name": "chatbot",
+  "version": "1.0.0",
+  "description": "Chatbot usando whatsapp-web.js",
+  "main": "chatbot.js",
+  "scripts": {
+    "start": "node chatbot.js"
+  },
   "dependencies": {
     "inquirer": "^12.3.0",
     "moment-timezone": "^0.5.45",
