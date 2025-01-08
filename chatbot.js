@@ -15,7 +15,7 @@ const client = new Client({
         headless: true,
         executablePath: '/usr/bin/google-chrome-stable', // Caminho para o navegador
         args: [
-            '--no-sandbox', 
+            '--no-sandbox',
             '--disable-setuid-sandbox',
         ],
     },
@@ -124,13 +124,65 @@ async function sendAndroidTestInfo(chat, message) {
     await client.sendMessage(message.from, media, { caption: 'Video ensinando como conectar no aplicativo!' });
 }
 
-// Função para enviar informações sobre o teste no iPhone
+// Função para enviar informações sobre o iPhone
 async function sendIphoneTestInfo(chat, message) {
     await simulateTyping(chat, 3000);
-    await client.sendMessage(message.from, 'Por favor, *BAIXE* este aplicativo: https://apps.apple.com/app/napsternetv/id1629465476.');
+    await client.sendMessage(
+        message.from,
+        'Por favor, *BAIXE* este aplicativo: https://apps.apple.com/app/napsternetv/id1629465476.'
+    );
     await simulateTyping(chat, 3500);
-    await client.sendMessage(message.from, 'Em qual operadora você gostaria de testar? Para testar, digite *vivo iphone* ou *tim iphone*, de acordo com a sua operadora.');
+    await client.sendMessage(
+        message.from,
+        'Em qual operadora você gostaria de testar? Para testar, digite *vivo iphone* ou *tim iphone*, de acordo com a sua operadora.'
+    );
 }
+
+// Lidar com resposta do cliente
+client.on('message', async (response) => {
+    const userReply = response.body.toLowerCase();
+
+    if (userReply.includes('vivo') && userReply.includes('iphone')) {
+        await simulateTyping(chat, 2000);
+
+        const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
+        const vivoFilePath = path.join(__dirname, 'vivotestepraiphone.inpv');
+        await downloadFile(vivoFileLink, vivoFilePath);
+        const media = MessageMedia.fromFilePath(vivoFilePath);
+        await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para Vivo no iPhone' });
+
+        await simulateTyping(chat, 3000);
+        await client.sendMessage(response.from, 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!');
+        
+        const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+        const vivoVideoPath = path.join(__dirname, 'vivo_tutorial_video.mp4');
+        await downloadFile(vivoVideoLink, vivoVideoPath);
+
+        const vivoVideoMedia = MessageMedia.fromFilePath(vivoVideoPath);
+        await client.sendMessage(response.from, vivoVideoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
+    }
+
+    else if (userReply.includes('tim') && userReply.includes('iphone')) {
+        await simulateTyping(chat, 3000);
+
+        try {
+            const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
+            const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv');
+            await downloadFile(timFileLink, timFilePath);
+            const media = MessageMedia.fromFilePath(timFilePath);
+            await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
+
+            const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+            const timVideoPath = path.join(__dirname, 'tim_tutorial_video.mp4');
+            await downloadFile(timVideoLink, timVideoPath);
+
+            const timVideoMedia = MessageMedia.fromFilePath(timVideoPath);
+            await client.sendMessage(response.from, timVideoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na TIM no iPhone!' });
+        } catch (error) {
+            console.error('Erro ao enviar arquivo ou vídeo para TIM:', error);
+        }
+    }
+});
 
 // Função para enviar informações sobre como aderir
 async function sendJoinInstructions(chat, message) {
@@ -138,40 +190,32 @@ async function sendJoinInstructions(chat, message) {
     await client.sendMessage(message.from, 'Para aderir, basta escolher um dos nossos planos, efetuar o pagamento e enviar o comprovante. Nossa chave PIX é a seguinte:\n\n' +
         'Chave PIX Nubank: speednetservicec@gmail.com\n' +
         'Nome: Julio Cezar\n\n' +
-        'Por favor, envie o comprovante para que possamos liberar seu acesso.'
-    );
+        'Por favor, envie o comprovante após o pagamento, e faremos a ativação do seu plano!');
 }
 
-// Função para enviar informações para revendedores
+// Função para enviar informações sobre revenda
 async function sendResellerInfo(chat, message) {
-    await simulateTyping(chat, 2000);
-    await message.reply('Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 7.');
-}
-
-// Função para enviar tabela de preços para revendedores
-async function sendResellerPricing(chat, message) {
     await simulateTyping(chat, 3000);
-    await message.reply('📲 SPEEDNET - SOLUÇÕES EM VPN 📡\n\n' +
-        '*INFORMAÇÕES PARA NOVOS CLIENTES*\n' +
-        'Quer revender nossos serviços? Escolha seu plano de revendedor logo abaixo:\n\n' +
-        '🚀 PLANOS PARA REVENDER APENAS PARA *ANDROID* 🚀\n' +
-        '*Operadoras disponíveis:*\n' +
-        '- *Tim ✅*\n' +
-        '- *VIVO (funcionando normalmente). ✅*\n\n' +
-        '... (detalhes de preços continuam)'
-    );
+    await client.sendMessage(message.from, 'Para se tornar um revendedor, basta entrar em contato conosco para receber seu link de revenda. A comissões e valores podem ser discutidos diretamente com nossa equipe!');
 }
 
-// Função para enviar os termos de uso
-async function sendTermsOfService(chat, message) {
+// Função para enviar tabela de revenda
+async function sendResellerPricing(chat, message) {
     await simulateTyping(chat, 2000);
-    await message.reply('Aqui estão os termos de uso...');
+    await client.sendMessage(message.from, 'Nossos preços para revenda são os seguintes: (em breve disponível). Entre em contato para mais detalhes.');
+}
+
+// Função para enviar os Termos de Uso
+async function sendTermsOfService(chat, message) {
+    await simulateTyping(chat, 1500);
+    await client.sendMessage(message.from, 'Confira os nossos Termos de Serviço digitando 6.');
 }
 
 // Função para enviar informações de suporte
 async function sendSupportInfo(chat, message) {
-    await simulateTyping(chat, 2000);
-    await message.reply('Fale com o nosso suporte para mais ajuda...');
+    await simulateTyping(chat, 2500);
+    await client.sendMessage(message.from, 'Iremos te encaminhar para um atendente.!');
 }
 
+// Inicialização do cliente
 client.initialize();
