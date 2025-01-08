@@ -154,7 +154,7 @@ client.on('message', async (message) => {
                     // Baixar e enviar o vídeo da Vivo diretamente
                     const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
                     const vivoVideoPath = path.join(__dirname, 'vivo_tutorial_video.mp4');
-                    await client.sendMessage(response.from, MessageMedia.fromFilePath(vivoVideoPath), { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
+                    await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
 
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 3000);
@@ -181,7 +181,6 @@ client.on('message', async (message) => {
                         console.error('Erro ao enviar arquivo ou vídeo para TIM:', error);
                     }
                     break;
-                    
                     case '5':
                         await simulateTyping(chat, 2000);
                         await client.sendMessage(
@@ -191,12 +190,15 @@ client.on('message', async (message) => {
                             'Nome: Julio Cezar\n\n' +
                             'Por favor, envie o comprovante para que possamos liberar seu acesso.'
                         );
-                        break;    
-                        case '6':
-                            await simulateTyping(chat, 2000);
-                            await message.reply(
-                                'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 7.'
-                            );
+                        break;
+                    
+                    case '6':
+                        await simulateTyping(chat, 2000);
+                        await message.reply(
+                            'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 7.'
+                        );
+                        break;
+                    
                             break;
                         case '7':
                             await simulateTyping(chat, 3000);
