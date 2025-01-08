@@ -191,14 +191,11 @@ client.on('message', async (message) => {
                             'Por favor, envie o comprovante para que possamos liberar seu acesso.'
                         );
                         break;
-                    
-                    case '6':
-                        await simulateTyping(chat, 2000);
-                        await message.reply(
-                            'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 7.'
-                        );
-                        break;
-                    
+                        case '6':
+                            await simulateTyping(chat, 2000);
+                            await message.reply(
+                                'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 7.'
+                            );
                             break;
                         case '7':
                             await simulateTyping(chat, 3000);
