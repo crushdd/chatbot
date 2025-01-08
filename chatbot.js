@@ -208,14 +208,13 @@ async function sendResellerPricing(chat, message) {
 // Função para enviar os Termos de Uso
 async function sendTermsOfService(chat, message) {
     await simulateTyping(chat, 1500);
-    await client.sendMessage(message.from, 'Confira os nossos Termos de Serviço digitando 6.');
+    await client.sendMessage(message.from, 'Confira os nossos Termos de Uso no link: https://www.hyper.com.br/termos-de-uso');
 }
 
 // Função para enviar informações de suporte
 async function sendSupportInfo(chat, message) {
     await simulateTyping(chat, 2500);
-    await client.sendMessage(message.from, 'Iremos te encaminhar para um atendente.!');
+    await client.sendMessage(message.from, 'Caso precise de ajuda, entre em contato com nosso suporte técnico via WhatsApp: +55 (11) 12345-6789.');
 }
 
-// Inicialização do cliente
 client.initialize();
