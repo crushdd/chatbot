@@ -73,6 +73,9 @@ client.on('message', async (message) => {
         case '7': await sendResellerPricing(chat, message); break;
         case '8': await sendTermsOfService(chat, message); break;
         case '9': await sendSupportInfo(chat, message); break;
+        default:
+            // Caso a mensagem não seja uma opção válida, apenas não faz nada.
+            break;
     }
 });
 
@@ -138,51 +141,39 @@ async function sendIphoneTestInfo(chat, message) {
     );
 }
 
-// Lidar com resposta do cliente
-client.on('message', async (response) => {
-    const userReply = response.body.toLowerCase();
+// Função para enviar os arquivos específicos e vídeo com base na operadora
+async function sendIphoneOperadoraFiles(chat, message) {
+    const operadora = message.body.toLowerCase();
+    let fileLink, videoLink, fileName, videoFileName;
 
-    if (userReply.includes('vivo') && userReply.includes('iphone')) {
-        await simulateTyping(chat, 2000);
-
-        const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
-        const vivoFilePath = path.join(__dirname, 'vivotestepraiphone.inpv');
-        await downloadFile(vivoFileLink, vivoFilePath);
-        const media = MessageMedia.fromFilePath(vivoFilePath);
-        await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para Vivo no iPhone' });
-
-        await simulateTyping(chat, 3000);
-        await client.sendMessage(response.from, 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!');
-        
-        const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
-        const vivoVideoPath = path.join(__dirname, 'vivo_tutorial_video.mp4');
-        await downloadFile(vivoVideoLink, vivoVideoPath);
-
-        const vivoVideoMedia = MessageMedia.fromFilePath(vivoVideoPath);
-        await client.sendMessage(response.from, vivoVideoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
+    if (operadora.includes("vivo iphone")) {
+        // Vivo iPhone
+        fileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
+        videoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+        fileName = 'vivo_iphone_config.inpv';
+        videoFileName = 'vivo_iphone_video.mp4';
+    } else if (operadora.includes("tim iphone")) {
+        // TIM iPhone
+        fileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
+        videoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
+        fileName = 'tim_iphone_config.inpv';
+        videoFileName = 'tim_iphone_video.mp4';
+    } else {
+        return;
     }
 
-    else if (userReply.includes('tim') && userReply.includes('iphone')) {
-        await simulateTyping(chat, 3000);
+    // Baixar e enviar o arquivo
+    const filePath = path.join(__dirname, fileName);
+    await downloadFile(fileLink, filePath);
+    const fileMedia = MessageMedia.fromFilePath(filePath);
+    await client.sendMessage(message.from, fileMedia, { caption: 'Arquivo de configuração para a sua operadora.' });
 
-        try {
-            const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
-            const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv');
-            await downloadFile(timFileLink, timFilePath);
-            const media = MessageMedia.fromFilePath(timFilePath);
-            await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
-
-            const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
-            const timVideoPath = path.join(__dirname, 'tim_tutorial_video.mp4');
-            await downloadFile(timVideoLink, timVideoPath);
-
-            const timVideoMedia = MessageMedia.fromFilePath(timVideoPath);
-            await client.sendMessage(response.from, timVideoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na TIM no iPhone!' });
-        } catch (error) {
-            console.error('Erro ao enviar arquivo ou vídeo para TIM:', error);
-        }
-    }
-});
+    // Baixar e enviar o vídeo
+    const videoPath = path.join(__dirname, videoFileName);
+    await downloadFile(videoLink, videoPath);
+    const videoMedia = MessageMedia.fromFilePath(videoPath);
+    await client.sendMessage(message.from, videoMedia, { caption: 'Veja o vídeo explicativo sobre como conectar.' });
+}
 
 // Função para enviar informações sobre como aderir
 async function sendJoinInstructions(chat, message) {
@@ -208,13 +199,14 @@ async function sendResellerPricing(chat, message) {
 // Função para enviar os Termos de Uso
 async function sendTermsOfService(chat, message) {
     await simulateTyping(chat, 1500);
-    await client.sendMessage(message.from, 'Confira os nossos Termos de Uso no link: https://www.hyper.com.br/termos-de-uso');
+    await client.sendMessage(message.from, 'Confira os nossos Termos de Uso completos no seguinte link: [Termos de Uso - Hyper] https://www.hyper.com/termos');
 }
 
 // Função para enviar informações de suporte
 async function sendSupportInfo(chat, message) {
-    await simulateTyping(chat, 2500);
-    await client.sendMessage(message.from, 'Caso precise de ajuda, entre em contato com nosso suporte técnico via WhatsApp: +55 (11) 12345-6789.');
+    await simulateTyping(chat, 1500);
+    await client.sendMessage(message.from, 'Caso precise de suporte, entre em contato com nossa equipe pelo número: *[XX] 99999-9999* ou pelo nosso chat online no site!');
 }
 
+// Iniciar o cliente
 client.initialize();
