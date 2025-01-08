@@ -75,8 +75,7 @@ client.on('message', async (message) => {
             '6 - Quero me tornar um Revendedor\n' +
             '7 - Tabela de Valores para Revenda\n' +
             '8 - Termos de Uso\n' +
-            '9 - Falar com um Atendente\n' + 
-            '10 - Formas de pagamento\n' +                    
+            '9 - Falar com um Atendente\n'
         );
         return;
     }
@@ -199,7 +198,7 @@ client.on('message', async (message) => {
                 'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 7.'
             );
             break;
-            case '7':
+        case '7':
                 await simulateTyping(chat, 3000);
                 await message.reply(
                     '📲 SPEEDNET - SOLUÇÕES EM VPN 📡\n\n' +
@@ -266,7 +265,7 @@ client.on('message', async (message) => {
                     'Seja bem-vindo(a) ao *SpeedNet - Soluções em VPN!* ✌️'
                 );       
             break;
-            case '8':
+        case '8':
                 await simulateTyping(chat, 3500);
                 await client.sendMessage(
                     message.from,
@@ -314,7 +313,7 @@ client.on('message', async (message) => {
                     'Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência possível dentro das limitações do serviço. Para dúvidas adicionais, entre em contato. 🚀'
                 );
                 break;
-                case '9':
+            case '9':
                     await simulateTyping(chat, 2000);
                     await message.reply(
                         'Por favor, aguarde um momento. Estamos encaminhando um de nossos atendentes para ajudá-lo!'
@@ -326,8 +325,8 @@ client.on('message', async (message) => {
                             'Aceitamos transferências via PIX, pagamentos com cartões e boletos bancários.'
                         );
                         break;        
-    }
-});
-
-// Iniciar o cliente WhatsApp
-client.initialize();
+                }
+            });
+    
+            // Iniciar o cliente WhatsApp
+            client.initialize();    
