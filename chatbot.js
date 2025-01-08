@@ -154,7 +154,7 @@ client.on('message', async (message) => {
                     // Baixar e enviar o vídeo da Vivo diretamente
                     const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
                     const vivoVideoPath = path.join(__dirname, 'vivo_tutorial_video.mp4');
-                    await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
+                    await client.sendMessage(response.from, MessageMedia.fromFilePath(vivoVideoPath), { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
 
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 3000);
