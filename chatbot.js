@@ -102,7 +102,7 @@ client.on('message', async (message) => {
                 message.from,
                 '👤 Usuário: 4000\n🔑 Senha: 4000\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
             );
-            await simulateTyping(chat, 3150);
+            await simulateTyping(chat, 2100);
 
             // Agora, o vídeo será baixado e enviado diretamente
             const videoLink = 'https://drive.google.com/uc?export=download&id=1B30tef3Ic9lImJy6J_EadmjwlhOUcJcd';
@@ -214,10 +214,6 @@ client.on('message', async (message) => {
             } else {
                 await message.reply('Desculpe, o vídeo informativo não foi encontrado.');
             }
-            break;
-        default:
-            await simulateTyping(chat, 1500);
-            await message.reply('Desculpe, não entendi sua mensagem. Por favor, digite "menu" para começar.');
             break;
     }
 });
