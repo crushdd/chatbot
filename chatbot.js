@@ -67,14 +67,16 @@ client.on('message', async (message) => {
         await client.sendMessage(
             message.from,
             `Olá, ${name.split(' ')[0]}! Sou o assistente virtual da Hyper. Escolha uma das opções abaixo digitando o número correspondente:\n\n` +
-            '1 - Como funciona\n' +
-            '2 - Valores dos planos\n' +
+            '1 - Como Funciona\n' +
+            '2 - Valores dos Planos\n' +
             '3 - Fazer teste no Android\n' +
             '4 - Fazer teste no iPhone\n' +
-            '5 - Como aderir\n' +
-            '6 - Outras perguntas\n' +
-            '7 - Receber imagem informativa\n' +
-            '8 - Baixar e enviar vídeo informativo'
+            '5 - Como Aderir\n' +
+            '6 - Quero me tornar um Revendedor\n' +
+            '7 - Tabela de Valores para Revenda\n' +
+            '8 - Termos de Uso\n' +
+            '9 - Falar com um Atendente\n' + 
+            '10 - Formas de pagamento\n' +                    
         );
         return;
     }
@@ -102,8 +104,8 @@ client.on('message', async (message) => {
                 message.from,
                 '👤 Usuário: 4000\n🔑 Senha: 4000\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
             );
-            await simulateTyping(chat, 2100);
-
+            await simulateTyping(chat, 3150);
+            
             // Agora, o vídeo será baixado e enviado diretamente
             const videoLink = 'https://drive.google.com/uc?export=download&id=1B30tef3Ic9lImJy6J_EadmjwlhOUcJcd';
             const videoFilePath = path.join(__dirname, 'tutorial_video.mp4'); // Caminho para salvar o vídeo
@@ -112,7 +114,7 @@ client.on('message', async (message) => {
 
             // Enviar o vídeo para a conversa
             const media = MessageMedia.fromFilePath(videoFilePath); // Criar o objeto de mídia
-            await client.sendMessage(message.from, media, { caption: 'Vídeo ensinando como conectar no aplicativo!' });
+            await client.sendMessage(message.from, media, { caption: 'Video ensinando como conectar no aplicativo!' });
 
             break;
         case '4':
@@ -149,14 +151,12 @@ client.on('message', async (message) => {
                         response.from,
                         `Aqui está o vídeo tutorial para conectar na Vivo no iPhone!`
                     );
-
+                    
                     // Baixar e enviar o vídeo da Vivo diretamente
                     const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
                     const vivoVideoPath = path.join(__dirname, 'vivo_tutorial_video.mp4');
-
-                    await downloadFile(vivoVideoLink, vivoVideoPath);
-                    const vivoMedia = MessageMedia.fromFilePath(vivoVideoPath);
                     await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
+
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 3000);
 
@@ -178,45 +178,156 @@ client.on('message', async (message) => {
                         await downloadFile(timVideoLink, timVideoPath);
                         const timMedia = MessageMedia.fromFilePath(timVideoPath);
                         await client.sendMessage(response.from, timMedia, { caption: 'Aqui está o vídeo tutorial para conectar na TIM no iPhone!' });
-                    } catch (err) {
-                        console.error('Erro ao processar o arquivo ou vídeo:', err);
+                    } catch (error) {
+                        console.error('Erro ao enviar arquivo ou vídeo para TIM:', error);
                     }
+                    break;
                 }
-            });
-            break;
         case '5':
             await simulateTyping(chat, 2000);
             await client.sendMessage(
                 message.from,
-                'Para aderir, basta acessar nosso site oficial ou entrar em contato pelo WhatsApp para escolher o plano ideal para você.'
+                'Para aderir, basta escolher um dos nossos planos, efetuar o pagamento e enviar o comprovante. Nossa chave PIX é a seguinte:\n\n' +
+                'Chave PIX Nubank: speednetservicec@gmail.com\n' +
+                'Nome: Julio Cezar\n\n' +
+                'Por favor, envie o comprovante para que possamos liberar seu acesso.'
             );
             break;
         case '6':
             await simulateTyping(chat, 2000);
-            await message.reply('Envie sua pergunta! Estamos aqui para ajudar.');
+            await message.reply(
+                'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 7.'
+            );
             break;
-        case '7':
-            await simulateTyping(chat, 2000);
-            const imagePath = './imagemInformativa.png'; // Substitua pelo caminho da imagem
-            if (fs.existsSync(imagePath)) {
-                const media = MessageMedia.fromFilePath(imagePath);
-                await client.sendMessage(message.from, media, { caption: 'Aqui está a imagem informativa!' });
-            } else {
-                await message.reply('Desculpe, a imagem informativa não foi encontrada.');
-            }
+            case '7':
+                await simulateTyping(chat, 3000);
+                await message.reply(
+                    '📲 SPEEDNET - SOLUÇÕES EM VPN 📡\n\n' +
+            
+                    '*INFORMAÇÕES PARA NOVOS CLIENTES*\n' +
+                    'Quer revender nossos serviços? Escolha seu plano de revendedor logo abaixo:\n\n' +
+            
+                    '🚀 PLANOS PARA REVENDER APENAS PARA *ANDROID* 🚀\n' +
+                    '*Operadoras disponíveis:*\n' +
+                    '- *im ✅\n' +
+                    '- VIVO (funcionando normalmente). ✅\n\n' +
+            
+                    '*Preços por quantidade de créditos no painel (sem acesso ao servidor iPhone):*\n' +
+                    '- *10 a 49 créditos/unidades*: R$ *,00 cada\n' +
+                    '- *50 a 99 créditos/unidades*: R$ 3,00 cada\n' +
+                    '- *100 a 299 créditos/unidades*: R$ 2,50 cada\n' +
+                    '- *300 a 499 créditos/unidades*: R$ 2,00 cada\n' +
+                    '- *500 ou mais créditos/unidades*: R$ 1,50 cada\n\n' +
+            
+                    '➡️ *Obs:* Ao comprar em maior quantidade, o valor de cada crédito fica mais barato. Por exemplo: adquirindo acima de 49 créditos, cada um sai por R$ 3,00; comprando acima de 99 créditos, o valor reduz para R$ 2,50 cada, e assim por diante.\n\n' +
+                    '*📆 Pagamento mensal obrigatório*\n\n' +
+            
+                    '---\n\n' +
+            
+                    '🚀 PLANOS PARA *IPHONE + ANDROID* 🚀\n' +
+                    '**Operadoras disponíveis:**\n' +
+                    '- Tim ✅\n' +
+                    '- VIVO (funcionando normalmente). ✅\n\n' +
+            
+                    '*Preços por quantidade de créditos no painel (com acesso ao servidor iPhone):*\n' +
+                    '- *10 a 49 créditos*: R$ 4,50 cada\n' +
+                    '- *50 a 99 créditos*: R$ 3,50 cada\n' +
+                    '- *100 a 299 créditos*: R$ 3,00 cada\n' +
+                    '- *300 a 499 créditos*: R$ 2,00 cada\n' +
+                    '- *500 ou mais créditos*: R$ 1,50 cada\n\n' +
+            
+                    '➡️ *Obs:* Ao comprar em maior quantidade, o valor de cada crédito fica mais barato. Por exemplo: adquirindo acima de 49 créditos, cada um sai por R$ 3,50; comprando acima de 99 créditos, o valor reduz para R$ 3,00 cada, e assim por diante.\n\n' +
+                    '*📆 Pagamento mensal obrigatório*\n\n' +
+            
+                    '---\n\n' +
+            
+                    'COMO ADQUIRIR SEU PLANO:\n' +
+                    '1. Escolha seu plano Android ou iPhone.\n' +
+                    '2. Realize o pagamento via:\n' +
+                    '   - *🏦 Banco:* Nubank\n' +
+                    '   - *💠 PIX:* speednetservicec@gmail.com\n' +
+                    '3. Envie o comprovante de pagamento.\n\n' +
+            
+                    '*📥 Liberação imediata do painel após envio do comprovante.*\n\n' +
+            
+                    '---\n\n' +
+            
+                    '*SUPORTE:*\n' +
+                    '- Acesse nossos grupos no WhatsApp para suporte e atendimento exclusivo para clientes.\n\n' +
+            
+                    '*MATERIAL PARA DIVULGAÇÃO:*\n' +
+                    '- Após adquirir a revenda, fornecemos banners e vídeos exclusivos para facilitar sua divulgação e atrair mais clientes.\n\n' +
+            
+                    '---\n\n' +
+            
+                    '*✅ Garantimos a qualidade do serviço.*\n' +
+                    '*❌ Não realizamos devolução do valor investido.*\n\n' +
+            
+                    'Seja bem-vindo(a) ao *SpeedNet - Soluções em VPN!* ✌️'
+                );       
             break;
-        case '8':
-            await simulateTyping(chat, 2000);
-            const videoPath = './videoInformativo.mp4'; // Substitua pelo caminho do vídeo
-            if (fs.existsSync(videoPath)) {
-                const media = MessageMedia.fromFilePath(videoPath);
-                await client.sendMessage(message.from, media, { caption: 'Aqui está o vídeo informativo!' });
-            } else {
-                await message.reply('Desculpe, o vídeo informativo não foi encontrado.');
-            }
-            break;
+            case '8':
+                await simulateTyping(chat, 3500);
+                await client.sendMessage(
+                    message.from,
+                    '*TERMOS DE USO – HYPER NET*\n\n' +
+                    'Bem-vindo à *HYPER NET*, fornecedora de internet via aplicativos VPN. Ao utilizar nossos serviços, você concorda integralmente com os termos e condições descritos abaixo. Leia atentamente para evitar dúvidas ou desentendimentos futuros.\n\n' +
+                    '---\n\n' +
+                    '⚠️ *SOBRE O SERVIÇO* ⚠️\n' +
+                    'A *HYPER NET* oferece conexão à internet utilizando VPN, que funciona de forma diferente das conexões Wi-Fi tradicionais. É possível acessar jogos, realizar ligações via WhatsApp e usar serviços de streaming, mas *não garantimos uma experiência idêntica à de uma conexão Wi-Fi*.\n\n' +
+                    'Se você precisa de:\n' +
+                    '- *Ping abaixo de 100ms para jogos online*;\n' +
+                    '- *Streaming em qualidade 4K sem interrupções*;\n' +
+                    '- *Downloads de arquivos grandes via torrent*;\n\n' +
+                    '*Recomendamos contratar um serviço de Wi-Fi de um provedor local.* Essa informação deve ser repassada aos clientes antes da compra para evitar frustrações e mal-entendidos.\n\n' +
+                    '---\n\n' +
+                    '⭐ *SUPORTE* ⭐\n' +
+                    '1. *Treinamento e Instruções:* Ajudamos a configurar os aplicativos e o painel do revendedor. Caso o serviço apresente problemas, entre em contato para análise.\n' +
+                    '2. *Limitações:*\n' +
+                    '   - Problemas de lentidão, manutenção na rede, ou bloqueios da operadora não estão sob nossa responsabilidade.\n' +
+                    '   - Se houver instabilidade na rede da operadora, nossa equipe orientará sobre possíveis soluções, mas *não podemos garantir suporte em questões externas à VPN.*\n' +
+                    '3. *Responsabilidade do Revendedor:*\n' +
+                    '   - Revendedores precisam compreender e solucionar problemas comuns. Caso a solução já tenha sido ensinada previamente, não responderemos questões repetidas.\n' +
+                    '   - *Leitura obrigatória do grupo de avisos:* Todas as atualizações são publicadas no grupo. Questões já esclarecidas lá não serão respondidas novamente.\n\n' +
+                    '⚠️ *Respeite a ordem de atendimento.* Flood de mensagens ou chamadas repetidas atrasam o suporte.\n\n' +
+                    '---\n\n' +
+                    '⭐ *GARANTIAS* ⭐\n' +
+                    '1. O serviço contratado é válido por 30 dias. Caso o método de conexão seja bloqueado pela operadora antes desse prazo, os dias perdidos serão repostos sem custo adicional.\n' +
+                    '2. *Importante:* Bloqueios da operadora podem ocorrer em determinadas regiões ou estados, afetando todos os usuários. Esse tipo de interrupção está fora do nosso controle.\n\n' +
+                    '---\n\n' +
+                    '⭐ *REEMBOLSO* ⭐\n' +
+                    '- Oferecemos *testes gratuitos* antes da compra para uso pessoal ou revenda.\n' +
+                    '- Por se tratar de um produto digital, não realizamos reembolsos totais ou parciais após a compra.\n\n' +
+                    '---\n\n' +
+                    '⭐ *REGRAS DE USO* ⭐\n\n' +
+                    '1. *Dispositivos Limitados:* Respeite o limite contratado. O uso indevido em múltiplos dispositivos pode acarretar suspensão do serviço.\n' +
+                    '2. *Proibição de Torrents e P2P:* O uso desses serviços sobrecarrega os servidores e prejudica todos os usuários.\n' +
+                    '3. *Atividades Ilícitas:* É proibido utilizar o serviço para ataques DDoS, carding ou qualquer crime cibernético.\n' +
+                    '4. *Citação de Outros Serviços:* É proibido divulgar concorrentes em grupos ou contatar outros revendedores para vendas não autorizadas.\n' +
+                    '5. *Vendas Não Autorizadas:* A comercialização de produtos não relacionados, como IPTV, em nossos grupos ou privados, é terminantemente proibida.\n\n' +
+                    '⚠️ *Penalidades:* O descumprimento de qualquer regra resultará no cancelamento do acesso sem aviso prévio, reembolso ou reativação da conta.\n\n' +
+                    '---\n\n' +
+                    '*ATENÇÃO, REVENDEDORES*\n\n' +
+                    '1. *Logins acima de 30 dias não são permitidos sem autorização prévia.* Logins longos sobrecarregam os servidores. A detecção de logins irregulares resultará na exclusão automática do acesso.\n' +
+                    '2. *Seja proativo:* Leia os avisos no grupo e evite dependência excessiva do suporte. Quanto mais informado você estiver, mais rápido conseguirá atender seus clientes.\n\n' +
+                    '---\n\n' +
+                    'Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência possível dentro das limitações do serviço. Para dúvidas adicionais, entre em contato. 🚀'
+                );
+                break;
+                case '9':
+                    await simulateTyping(chat, 2000);
+                    await message.reply(
+                        'Por favor, aguarde um momento. Estamos encaminhando um de nossos atendentes para ajudá-lo!'
+                    );
+                    break;   
+                    case '10':
+                        await simulateTyping(chat, 2000);
+                        await message.reply(
+                            'Aceitamos transferências via PIX, pagamentos com cartões e boletos bancários.'
+                        );
+                        break;        
     }
 });
 
-// Inicializar cliente WhatsApp
+// Iniciar o cliente WhatsApp
 client.initialize();
