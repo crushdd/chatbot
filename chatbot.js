@@ -187,7 +187,7 @@ client.on('message', async (message) => {
 
             // Aguardar a resposta do cliente
             const filter = (response) => response.from === message.from;
-            const collector = client.on('message', async (response) => {
+            const collector = async (response) => {
                 if (response.from !== message.from) return;
 
                 const userReply = response.body.toLowerCase();
@@ -247,12 +247,14 @@ client.on('message', async (message) => {
                         console.error('Erro ao processar o arquivo ou vídeo:', err);
                     }
                 }
-            });
 
-            // Remover o coletor após a primeira resposta
-            client.removeListener('message', collector);
+                // Remover o coletor após a primeira resposta
+                client.removeListener('message', collector);
+            };
+
+            client.on('message', collector);
             break;
-		case '5':
+		        case '5':
             await simulateTyping(chat, 2220);
             await client.sendMessage(
                 message.from,
@@ -446,4 +448,4 @@ Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência
 });
 
 // Inicializar cliente WhatsApp
-client.initialize();
+client.initialize();	
