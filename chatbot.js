@@ -285,7 +285,71 @@ Caso tenha mais dúvidas, entre em contato conosco. Estamos à disposição para
             await simulateTyping(chat, 2000);
             await client.sendMessage(
                 message.from,
-                'Consultar o suporte.'
+                `📲 SPEEDNET - SOLUÇÕES EM VPN 📡
+
+*INFORMAÇÕES PARA NOVOS CLIENTES*
+Quer revender nossos serviços? Escolha seu plano de revendedor logo abaixo:
+
+🚀 PLANOS PARA REVENDER APENAS PARA *ANDROID* 🚀
+*Operadoras disponíveis:*
+- *Tim* ✅
+- *VIVO (funcionando normalmente).* ✅
+
+*Preços por quantidade de créditos no painel (sem acesso ao servidor iPhone):*
+- *10 a 49 créditos/unidades*: R$ 4,00 cada
+- *50 a 99 créditos/unidades*: R$ 3,00 cada
+- *100 a 299 créditos/unidades*: R$ 2,50 cada
+- *300 a 499 créditos/unidades*: R$ 2,00 cada
+- *500 ou mais créditos/unidades*: R$ 1,50 cada
+
+➡️ *Obs:* Ao comprar em maior quantidade, o valor de cada crédito fica mais barato. Por exemplo: adquirindo acima de 49 créditos, cada um sai por R$ 3,00; comprando acima de 99 créditos, o valor reduz para R$ 2,50 cada, e assim por diante.
+
+*📆 Pagamento mensal obrigatório*
+
+---
+
+🚀 PLANOS PARA *IPHONE + ANDROID* 🚀
+*Operadoras disponíveis:*
+- *Tim* ✅
+- *VIVO (funcionando normalmente).* ✅
+
+*Preços por quantidade de créditos no painel (com acesso ao servidor iPhone):*
+- *10 a 49 créditos*: R$ 4,50 cada
+- *50 a 99 créditos*: R$ 3,50 cada
+- *100 a 299 créditos*: R$ 3,00 cada
+- *300 a 499 créditos*: R$ 2,00 cada
+- *500 ou mais créditos*: R$ 1,50 cada
+
+➡️ *Obs:* Ao comprar em maior quantidade, o valor de cada crédito fica mais barato. Por exemplo: adquirindo acima de 49 créditos, cada um sai por R$ 3,50; comprando acima de 99 créditos, o valor reduz para R$ 3,00 cada, e assim por diante.
+
+*📆 Pagamento mensal obrigatório*
+
+---
+
+COMO ADQUIRIR SEU PLANO:
+1. Escolha seu plano Android ou iPhone.
+2. Realize o pagamento via:
+   - *🏦 Banco:* Nubank
+   - *💠 PIX:* speednetservicec@gmail.com
+3. Envie o comprovante de pagamento.
+
+*📥 Liberação imediata do painel após envio do comprovante.*
+
+---
+
+*SUPORTE:*
+- Acesse nossos grupos no WhatsApp para suporte e atendimento exclusivo para clientes.
+
+*MATERIAL PARA DIVULGAÇÃO:*
+- Após adquirir a revenda, fornecemos banners e vídeos exclusivos para facilitar sua divulgação e atrair mais clientes.
+
+---
+
+*✅ Garantimos a qualidade do serviço.*
+
+*❌ Não realizamos devolução do valor investido.*
+
+Seja bem-vindo(a) ao *SpeedNet - Soluções em VPN!* ✌️`
             );
             break;
         case '10':
