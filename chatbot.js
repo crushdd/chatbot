@@ -72,10 +72,11 @@ client.on('message', async (message) => {
             '3 - Fazer teste no Android\n' +
             '4 - Fazer teste no iPhone\n' +
             '5 - Como aderir\n' +
-            '6 - Outras perguntas\n' +
-            '7 - Receber imagem informativa\n' +
-            '8 - Baixar e enviar vídeo informativo\n' +
-            '9 - Baixar e enviar imagem informativa'
+            '6 - Consultar grupo\n' +
+            '7 - Falar com um Atendente\n' +
+            '8 - Quero me tornar um Revendedor\n' +
+            '9 - Tabela de Valores para Revenda\n' +
+            '10 - Termos de uso'
         );
         return;
     }
@@ -189,32 +190,48 @@ client.on('message', async (message) => {
             await simulateTyping(chat, 2000);
             await client.sendMessage(
                 message.from,
-                'Para aderir, basta acessar nosso site oficial ou entrar em contato pelo WhatsApp para escolher o plano ideal para você.'
+                'Para aderir, basta escolher um dos nossos planos, efetuar o pagamento e enviar o comprovante. Nossa chave PIX é a seguinte:\n\n' +
+                'Chave PIX Nubank: speednetservicec@gmail.com\n' +
+                'Nome: Julio Cezar\n\n' +
+                'Por favor, envie o comprovante para que possamos liberar seu acesso.'
             );
             break;
         case '6':
             await simulateTyping(chat, 2000);
-            await message.reply('Envie sua pergunta! Estamos aqui para ajudar.');
+            await client.sendMessage(
+                message.from,
+                `*Perguntas Frequentes*
+
+*1. A conexão é segura? Meus dados estão protegidos?*
+*R:* Sim, nossa conexão é criptografada de ponta a ponta, garantindo total segurança para seus dados. Você sempre navegará com tranquilidade e privacidade.
+
+*2. O aplicativo pode apresentar quedas?*
+*R:* Sim, podem ocorrer quedas por dois motivos principais:
+- *Manutenções programadas:* Embora raras, manutenções podem ser realizadas para aprimorar o aplicativo. Quando isso acontece, ele pode ficar fora do ar por algumas horas. Sempre notificamos antecipadamente no grupo de clientes.
+- *Quedas inesperadas:* Caso ocorra uma queda por qualquer outro motivo e o aplicativo não volte a funcionar, garantimos a compensação do tempo em que ficou fora do ar.
+
+*3. Posso usar meu acesso em outros dispositivos?*
+*R:* Não. Se você compartilhar seu acesso ou utilizá-lo em mais de um dispositivo sem adquirir uma licença adicional, nosso sistema detectará a irregularidade, o acesso será suspenso, e não será recriado nem reembolsado. Para evitar problemas, nunca compartilhe seu acesso.
+
+*4. Existe um grupo para clientes?*
+*R:* Sim. Após a compra, você será adicionado ao grupo exclusivo de clientes. Nesse grupo, informamos sobre manutenções, descontos em renovações e quaisquer outras atualizações importantes.
+
+Caso tenha mais dúvidas, entre em contato conosco. Estamos à disposição para ajudar!`
+            );
             break;
         case '7':
             await simulateTyping(chat, 2000);
-            const imagePath = './imagemInformativa.png'; // Substitua pelo caminho da imagem
-            if (fs.existsSync(imagePath)) {
-                const media = MessageMedia.fromFilePath(imagePath);
-                await client.sendMessage(message.from, media, { caption: 'Aqui está a imagem informativa!' });
-            } else {
-                await message.reply('Desculpe, a imagem informativa não foi encontrada.');
-            }
+            await client.sendMessage(
+                message.from,
+                'Por favor, aguarde um momento enquanto direcionamos você para um de nossos atendentes.'
+            );
             break;
         case '8':
             await simulateTyping(chat, 2000);
-            const videoPath = './videoInformativo.mp4'; // Substitua pelo caminho do vídeo
-            if (fs.existsSync(videoPath)) {
-                const media = MessageMedia.fromFilePath(videoPath);
-                await client.sendMessage(message.from, media, { caption: 'Aqui está o vídeo informativo!' });
-            } else {
-                await message.reply('Desculpe, o vídeo informativo não foi encontrado.');
-            }
+            await client.sendMessage(
+                message.from,
+                'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 9.'
+            );
             break;
         case '9':
             await simulateTyping(chat, 2000);
@@ -285,6 +302,74 @@ COMO ADQUIRIR SEU PLANO:
 *❌ Não realizamos devolução do valor investido.*
 
 Seja bem-vindo(a) ao *SpeedNet - Soluções em VPN!* ✌️`
+            );
+            break;
+        case '10':
+            await simulateTyping(chat, 2000);
+            await client.sendMessage(
+                message.from,
+                `*TERMOS DE USO – HYPER NET*
+
+Bem-vindo à *HYPER NET*, fornecedora de internet via aplicativos VPN. Ao utilizar nossos serviços, você concorda integralmente com os termos e condições descritos abaixo. Leia atentamente para evitar dúvidas ou desentendimentos futuros.
+
+---
+
+⚠️ *SOBRE O SERVIÇO* ⚠️
+A *HYPER NET* oferece conexão à internet utilizando VPN, que funciona de forma diferente das conexões Wi-Fi tradicionais. É possível acessar jogos, realizar ligações via WhatsApp e usar serviços de streaming, mas *não garantimos uma experiência idêntica à de uma conexão Wi-Fi*.
+
+Se você precisa de:
+- *Ping abaixo de 100ms para jogos online*;
+- *Streaming em qualidade 4K sem interrupções*;
+- *Downloads de arquivos grandes via torrent*;
+
+*Recomendamos contratar um serviço de Wi-Fi de um provedor local.* Essa informação deve ser repassada aos clientes antes da compra para evitar frustrações e mal-entendidos.
+
+---
+
+⭐ *SUPORTE* ⭐
+1. *Treinamento e Instruções:* Ajudamos a configurar os aplicativos e o painel do revendedor. Caso o serviço apresente problemas, entre em contato para análise.
+2. *Limitações:*
+   - Problemas de lentidão, manutenção na rede, ou bloqueios da operadora não estão sob nossa responsabilidade.
+   - Se houver instabilidade na rede da operadora, nossa equipe orientará sobre possíveis soluções, mas *não podemos garantir suporte em questões externas à VPN.*
+3. *Responsabilidade do Revendedor:*
+   - Revendedores precisam compreender e solucionar problemas comuns. Caso a solução já tenha sido ensinada previamente, não responderemos questões repetidas.
+   - *Leitura obrigatória do grupo de avisos:* Todas as atualizações são publicadas no grupo. Questões já esclarecidas lá não serão respondidas novamente.
+
+⚠️ *Respeite a ordem de atendimento.* Flood de mensagens ou chamadas repetidas atrasam o suporte.
+
+---
+
+⭐ *GARANTIAS* ⭐
+1. O serviço contratado é válido por 30 dias. Caso o método de conexão seja bloqueado pela operadora antes desse prazo, os dias perdidos serão repostos sem custo adicional.
+2. *Importante:* Bloqueios da operadora podem ocorrer em determinadas regiões ou estados, afetando todos os usuários. Esse tipo de interrupção está fora do nosso controle.
+
+---
+
+⭐ *REEMBOLSO* ⭐
+- Oferecemos *testes gratuitos* antes da compra para uso pessoal ou revenda.
+- Por se tratar de um produto digital, não realizamos reembolsos totais ou parciais após a compra.
+
+---
+
+⭐ *REGRAS DE USO* ⭐
+
+1. *Dispositivos Limitados:* Respeite o limite contratado. O uso indevido em múltiplos dispositivos pode acarretar suspensão do serviço.
+2. *Proibição de Torrents e P2P:* O uso desses serviços sobrecarrega os servidores e prejudica todos os usuários.
+3. *Atividades Ilícitas:* É proibido utilizar o serviço para ataques DDoS, carding ou qualquer crime cibernético.
+4. *Citação de Outros Serviços:* É proibido divulgar concorrentes em grupos ou contatar outros revendedores para vendas não autorizadas.
+5. *Vendas Não Autorizadas:* A comercialização de produtos não relacionados, como IPTV, em nossos grupos ou privados, é terminantemente proibida.
+
+⚠️ *Penalidades:* O descumprimento de qualquer regra resultará no cancelamento do acesso sem aviso prévio, reembolso ou reativação da conta.
+
+---
+
+*ATENÇÃO, REVENDEDORES*
+1. *Logins acima de 30 dias não são permitidos sem autorização prévia.* Logins longos sobrecarregam os servidores. A detecção de logins irregulares resultará na exclusão automática do acesso.
+2. *Seja proativo:* Leia os avisos no grupo e evite dependência excessiva do suporte. Quanto mais informado você estiver, mais rápido conseguirá atender seus clientes.
+
+---
+
+Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência possível dentro das limitações do serviço. Para dúvidas adicionais, entre em contato. 🚀`
             );
             break;
         default:
