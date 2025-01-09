@@ -211,7 +211,7 @@ client.on('message', async (message) => {
 
                     await downloadFile(vivoVideoLink, vivoVideoPath);
                     const vivoMedia = MessageMedia.fromFilePath(vivoVideoPath);
-                    await client.sendMessage(response.from, vivoMedia);
+                    await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na VIVO no iPhone!' });
 
                     // Apagar os arquivos após o envio
                     await deleteFile(vivoFilePath);
@@ -225,7 +225,7 @@ client.on('message', async (message) => {
                         const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo .inpv
 
                         // Baixar e enviar o arquivo de configuração
-                        await downloadFile(timFileLink, timFilePath);
+                         await downloadFile(timFileLink, timFilePath);
                         const media = MessageMedia.fromFilePath(timFilePath);
                         await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
 
