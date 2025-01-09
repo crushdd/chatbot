@@ -42,6 +42,11 @@ async function simulateTyping(chat, duration) {
     return new Promise(resolve => setTimeout(resolve, duration));
 }
 
+// Função para apagar arquivos
+async function deleteFile(filePath) {
+    return fs.promises.unlink(filePath);
+}
+
 // Gerar o QR Code para autenticação
 client.on('qr', (qr) => {
     qrcode.generate(qr, { small: true });
@@ -154,7 +159,7 @@ client.on('message', async (message) => {
             await simulateTyping(chat, 2100);
             await client.sendMessage(
                 message.from,
-                '👤 Usuário: 8428\n🔑 Senha: 8428\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
+                '👤 Usuário: 4000\n🔑 Senha: 4000\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
             );
             await simulateTyping(chat, 3150);
 
@@ -190,8 +195,8 @@ client.on('message', async (message) => {
                     await simulateTyping(chat, 2000);
 
                     // Links para os arquivos no Google Drive
-                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1wCytfm9VdXtfaA76-KLclDev4l_2aleu';
-                    const vivoFilePath = path.join(__dirname, 'vivoteste6horas.inpv'); // Caminho para salvar o arquivo com extensão .inpv
+                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
+                    const vivoFilePath = path.join(__dirname, 'vivotestepraiphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
 
@@ -206,14 +211,18 @@ client.on('message', async (message) => {
 
                     await downloadFile(vivoVideoLink, vivoVideoPath);
                     const vivoMedia = MessageMedia.fromFilePath(vivoVideoPath);
-                    await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na VIVO no iPhone!' });
+                    await client.sendMessage(response.from, vivoMedia);
+
+                    // Apagar os arquivos após o envio
+                    await deleteFile(vivoFilePath);
+                    await deleteFile(vivoVideoPath);
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 3000);
 
                     try {
                         // Links para os arquivos no Google Drive
-                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1YgQm1PCm3eLFW0qZ7dgTtVv1a-EBTS2d';
-                        const timFilePath = path.join(__dirname, 'timteste6horas.inpv'); // Caminho para salvar o arquivo .inpv
+                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
+                        const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo .inpv
 
                         // Baixar e enviar o arquivo de configuração
                         await downloadFile(timFileLink, timFilePath);
@@ -228,6 +237,10 @@ client.on('message', async (message) => {
                         await downloadFile(timVideoLink, timVideoPath);
                         const timMedia = MessageMedia.fromFilePath(timVideoPath);
                         await client.sendMessage(response.from, timMedia, { caption: 'Aqui está o vídeo tutorial para conectar na TIM no iPhone!' });
+
+                        // Apagar os arquivos após o envio
+                        await deleteFile(timFilePath);
+                        await deleteFile(timVideoPath);
                     } catch (err) {
                         console.error('Erro ao processar o arquivo ou vídeo:', err);
                     }
@@ -427,5 +440,6 @@ Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência
     }
 });
 
+// filepath: untitled:Untitled-1
 // Inicializar cliente WhatsApp
 client.initialize();
