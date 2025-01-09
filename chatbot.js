@@ -72,7 +72,7 @@ client.on('message', async (message) => {
             '3 - Fazer teste no Android\n' +
             '4 - Fazer teste no iPhone\n' +
             '5 - Como aderir\n' +
-            '6 - Consultar grupo\n' +
+            '6 - Perguntas frequentes\n' +
             '7 - Falar com um Atendente\n' +
             '8 - Quero me tornar um Revendedor\n' +
             '9 - Tabela de Valores para Revenda\n' +
