@@ -190,8 +190,8 @@ client.on('message', async (message) => {
                     await simulateTyping(chat, 2000);
 
                     // Links para os arquivos no Google Drive
-                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
-                    const vivoFilePath = path.join(__dirname, 'vivotestepraiphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
+                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1wCytfm9VdXtfaA76-KLclDev4l_2aleu';
+                    const vivoFilePath = path.join(__dirname, 'vivoteste6horas.inpv'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
 
@@ -212,8 +212,8 @@ client.on('message', async (message) => {
 
                     try {
                         // Links para os arquivos no Google Drive
-                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
-                        const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo .inpv
+                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1YgQm1PCm3eLFW0qZ7dgTtVv1a-EBTS2d';
+                        const timFilePath = path.join(__dirname, 'timteste6horas.inpv'); // Caminho para salvar o arquivo .inpv
 
                         // Baixar e enviar o arquivo de configuração
                         await downloadFile(timFileLink, timFilePath);
