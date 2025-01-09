@@ -66,7 +66,7 @@ client.on('message', async (message) => {
 
     // Opções para interagir com o menu principal
     if (message.body.match(/(menu|Menu|interessado)/i)) {
-        await simulateTyping(chat, 2000);
+        await simulateTyping(chat, 3910);
         const contact = await message.getContact();
         const name = contact.pushname || 'Amigo';
         await client.sendMessage(
@@ -80,7 +80,6 @@ client.on('message', async (message) => {
             '6 - Perguntas Frequentes\n' +
             '7 - Falar com um Atendente\n' +
             '8 - Quero me tornar um Revendedor\n' +
-            '9 - Tabela de Valores para Revenda\n' +
             '10 - Termos de uso'
         );
         return;
@@ -156,10 +155,10 @@ client.on('message', async (message) => {
                 message.from,
                 'Por favor, *INSTALE* este aplicativo: https://play.google.com/store/apps/details?id=com.hypernet23.pro e abra-o com o Wi-Fi ligado.'
             );
-            await simulateTyping(chat, 2100);
+            await simulateTyping(chat, 3100);
             await client.sendMessage(
                 message.from,
-                '👤 Usuário: 4000\n🔑 Senha: 4000\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
+                '👤 Usuário: 4265\n🔑 Senha: 4265\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
             );
             await simulateTyping(chat, 3150);
 
@@ -187,15 +186,18 @@ client.on('message', async (message) => {
             );
 
             // Aguardar a resposta do cliente
-            client.on('message', async (response) => {
+            const filter = (response) => response.from === message.from;
+            const collector = client.createMessageCollector(filter, { time: 60000 });
+
+            collector.on('collect', async (response) => {
                 const userReply = response.body.toLowerCase();
 
                 // Caso o usuário mencione "vivo iphone"
                 if (userReply.includes('vivo') && userReply.includes('iphone')) {
-                    await simulateTyping(chat, 2000);
+                    await simulateTyping(chat, 3160);
 
                     // Links para os arquivos no Google Drive
-                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
+                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1wCytfm9VdXtfaA76-KLclDev4l_2aleu)';
                     const vivoFilePath = path.join(__dirname, 'vivotestepraiphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
@@ -203,7 +205,7 @@ client.on('message', async (message) => {
                     const media = MessageMedia.fromFilePath(vivoFilePath);
                     await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para Vivo no iPhone' });
 
-                    await simulateTyping(chat, 3000); // Simula pausa antes de enviar
+                    await simulateTyping(chat, 3210); // Simula pausa antes de enviar
 
                     // Baixar e enviar o vídeo da Vivo diretamente
                     const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
@@ -211,7 +213,7 @@ client.on('message', async (message) => {
 
                     await downloadFile(vivoVideoLink, vivoVideoPath);
                     const vivoMedia = MessageMedia.fromFilePath(vivoVideoPath);
-                    await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na VIVO no iPhone!' });
+                    await client.sendMessage(response.from, vivoMedia);
 
                     // Apagar os arquivos após o envio
                     await deleteFile(vivoFilePath);
@@ -221,11 +223,11 @@ client.on('message', async (message) => {
 
                     try {
                         // Links para os arquivos no Google Drive
-                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
+                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1YgQm1PCm3eLFW0qZ7dgTtVv1a-EBTS2d';
                         const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo .inpv
 
                         // Baixar e enviar o arquivo de configuração
-                         await downloadFile(timFileLink, timFilePath);
+                        await downloadFile(timFileLink, timFilePath);
                         const media = MessageMedia.fromFilePath(timFilePath);
                         await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
 
@@ -236,7 +238,7 @@ client.on('message', async (message) => {
                         // Baixar e enviar o vídeo tutorial
                         await downloadFile(timVideoLink, timVideoPath);
                         const timMedia = MessageMedia.fromFilePath(timVideoPath);
-                        await client.sendMessage(response.from, timMedia, { caption: 'Aqui está o vídeo tutorial para conectar na TIM no iPhone!' });
+                        await client.sendMessage(response.from, timMedia);
 
                         // Apagar os arquivos após o envio
                         await deleteFile(timFilePath);
@@ -245,10 +247,11 @@ client.on('message', async (message) => {
                         console.error('Erro ao processar o arquivo ou vídeo:', err);
                     }
                 }
+                collector.stop();
             });
             break;
         case '5':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 2600);
             await client.sendMessage(
                 message.from,
                 'Para aderir, basta escolher um dos nossos planos, efetuar o pagamento e enviar o comprovante. Nossa chave PIX é a seguinte:\n\n' +
@@ -258,7 +261,7 @@ client.on('message', async (message) => {
             );
             break;
         case '6':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 3150);
             await client.sendMessage(
                 message.from,
                 `*Perguntas Frequentes*
@@ -281,21 +284,21 @@ Caso tenha mais dúvidas, entre em contato conosco. Estamos à disposição para
             );
             break;
         case '7':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 3100);
             await client.sendMessage(
                 message.from,
                 'Por favor, aguarde um momento enquanto direcionamos você para um de nossos atendentes.'
             );
             break;
         case '8':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 2500);
             await client.sendMessage(
                 message.from,
                 'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 9.'
             );
             break;
         case '9':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 3200);
             await client.sendMessage(
                 message.from,
                 `📲 SPEEDNET - SOLUÇÕES EM VPN 📡
@@ -366,7 +369,7 @@ Seja bem-vindo(a) ao *SpeedNet - Soluções em VPN!* ✌️`
             );
             break;
         case '10':
-            await simulateTyping(chat, 2000);
+            await simulateTyping(chat, 4000);
             await client.sendMessage(
                 message.from,
                 `*TERMOS DE USO – HYPER NET*
@@ -440,6 +443,5 @@ Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência
     }
 });
 
-// filepath: untitled:Untitled-1
 // Inicializar cliente WhatsApp
 client.initialize();
