@@ -72,7 +72,7 @@ client.on('message', async (message) => {
             '3 - Fazer teste no Android\n' +
             '4 - Fazer teste no iPhone\n' +
             '5 - Como aderir\n' +
-            '6 - Perguntas frequentes\n' +
+            '6 - Perguntas Frequentes\n' +
             '7 - Falar com um Atendente\n' +
             '8 - Quero me tornar um Revendedor\n' +
             '9 - Tabela de Valores para Revenda\n' +
@@ -206,9 +206,9 @@ client.on('message', async (message) => {
 
                     await downloadFile(vivoVideoLink, vivoVideoPath);
                     const vivoMedia = MessageMedia.fromFilePath(vivoVideoPath);
-                        await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na VIVO no iPhone!' });
-                    } catch (err) {
-                        console.error('Erro ao processar o arquivo ou vídeo:', err);
+                    await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na VIVO no iPhone!' });
+                } else if (userReply.includes('tim') && userReply.includes('iphone')) {
+                    await simulateTyping(chat, 3000);
 
                     try {
                         // Links para os arquivos no Google Drive
