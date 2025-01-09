@@ -60,7 +60,7 @@ client.on('message', async (message) => {
     const chat = await message.getChat();
 
     // Opções para interagir com o menu principal
-    if (message.body.match(/(menu|Menu|oi|Oi|Olá|olá|ola|Ola|interessado)/i)) {
+    if (message.body.match(/(menu|Menu|interessado)/i)) {
         await simulateTyping(chat, 2000);
         const contact = await message.getContact();
         const name = contact.pushname || 'Amigo';
