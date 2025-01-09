@@ -197,7 +197,7 @@ client.on('message', async (message) => {
                     await simulateTyping(chat, 2200);
 
                     // Links para os arquivos no Google Drive
-                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1wCytfm9VdXtfaA76-KLclDev4l_2aleu)';
+                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1wCytfm9VdXtfaA76-KLclDev4l_2aleu';
                     const vivoFilePath = path.join(__dirname, 'vivoteste6horas.inpv'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
