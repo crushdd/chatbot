@@ -58,7 +58,6 @@ client.on('ready', () => {
     console.log('Tudo certo! WhatsApp conectado.');
 });
 
-
 // Lidar com as mensagens recebidas no WhatsApp
 client.on('message', async (message) => {
     console.log('Mensagem recebida:', message.body);
