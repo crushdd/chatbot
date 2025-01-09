@@ -80,7 +80,6 @@ client.on('message', async (message) => {
             '6 - Perguntas Frequentes\n' +
             '7 - Falar com um Atendente\n' +
             '8 - Quero me tornar um Revendedor\n' +
-            '9 - Tabela de Valores\n' +			
             '10 - Termos de uso'
         );
         return;
@@ -249,8 +248,11 @@ client.on('message', async (message) => {
                     }
                 }
             });
+
+            // Remover o coletor após a primeira resposta
+            client.removeListener('message', collector);
             break;
-        case '5':
+		case '5':
             await simulateTyping(chat, 2220);
             await client.sendMessage(
                 message.from,
@@ -445,4 +447,3 @@ Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência
 
 // Inicializar cliente WhatsApp
 client.initialize();
-			
