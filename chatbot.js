@@ -80,6 +80,7 @@ client.on('message', async (message) => {
             '6 - Perguntas Frequentes\n' +
             '7 - Falar com um Atendente\n' +
             '8 - Quero me tornar um Revendedor\n' +
+            '9 - Tabela de Valores\n' +			
             '10 - Termos de uso'
         );
         return;
@@ -444,3 +445,4 @@ Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência
 
 // Inicializar cliente WhatsApp
 client.initialize();
+			
