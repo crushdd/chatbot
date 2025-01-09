@@ -186,74 +186,68 @@ client.on('message', async (message) => {
                 'Em qual operadora você gostaria de testar? Para testar, digite *vivo iphone* ou *tim iphone*, de acordo com a sua operadora.'
             );
 
-            // Aguardar a resposta do cliente
-            const filter = (response) => response.from === message.from;
-            const collector = async (response) => {
-                if (response.from !== message.from) return;
+// Aguardar a resposta do cliente
+const filter = (response) => response.from === message.from;
 
-                const userReply = response.body.toLowerCase();
+const collector = async (response) => {
+    if (response.from !== message.from) return;
 
-                // Caso o usuário mencione "vivo iphone"
-                if (userReply.includes('vivo') && userReply.includes('iphone')) {
-                    await simulateTyping(chat, 2200);
+    const userReply = response.body.toLowerCase();
 
-                    // Links para os arquivos no Google Drive
-                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1wCytfm9VdXtfaA76-KLclDev4l_2aleu';
-                    const vivoFilePath = path.join(__dirname, 'vivoteste6horas.inpv'); // Caminho para salvar o arquivo com extensão .inpv
+    const sendFileAndVideo = async (operator, fileLink, fileName, videoLink, videoName) => {
+        try {
+            // Baixar o arquivo de configuração
+            const filePath = path.join(__dirname, fileName);
+            await downloadFile(fileLink, filePath);
 
-                    await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
+            // Enviar o arquivo para o cliente
+            const media = MessageMedia.fromFilePath(filePath);
+            await client.sendMessage(response.from, media, {
+                caption: `Arquivo de configuração para ${operator} no iPhone`,
+            });
 
-                    const media = MessageMedia.fromFilePath(vivoFilePath);
-                    await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para Vivo no iPhone' });
+            // Baixar o vídeo tutorial
+            const videoPath = path.join(__dirname, videoName);
+            await downloadFile(videoLink, videoPath);
 
-                    await simulateTyping(chat, 3130); // Simula pausa antes de enviar
+            // Enviar o vídeo tutorial para o cliente
+            const videoMedia = MessageMedia.fromFilePath(videoPath);
+            await client.sendMessage(response.from, videoMedia);
 
-                    // Baixar e enviar o vídeo da Vivo diretamente
-                    const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
-                    const vivoVideoPath = path.join(__dirname, 'vivo_tutorial_video.mp4');
+            // Apagar os arquivos locais após o envio
+            await deleteFile(filePath);
+            await deleteFile(videoPath);
+        } catch (err) {
+            console.error(`Erro ao processar os arquivos para ${operator}:`, err);
+        }
+    };
 
-                    await downloadFile(vivoVideoLink, vivoVideoPath);
-                    const vivoMedia = MessageMedia.fromFilePath(vivoVideoPath);
-                    await client.sendMessage(response.from, vivoMedia);
+    if (userReply.includes('vivo') && userReply.includes('iphone')) {
+        // Processar e enviar arquivos para Vivo
+        await sendFileAndVideo(
+            'Vivo',
+            'https://drive.google.com/uc?export=download&id=1wCytfm9VdXtfaA76-KLclDev4l_2aleu',
+            'vivoteste6horas.inpv',
+            'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
+            'vivo_tutorial_video.mp4'
+        );
+    } else if (userReply.includes('tim') && userReply.includes('iphone')) {
+        // Processar e enviar arquivos para TIM
+        await sendFileAndVideo(
+            'TIM',
+            'https://drive.google.com/uc?export=download&id=1YgQm1PCm3eLFW0qZ7dgTtVv1a-EBTS2d',
+            'timteste6horas.inpv',
+            'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
+            'tim_tutorial_video.mp4'
+        );
+    }
 
-                    // Apagar os arquivos após o envio
-                    await deleteFile(vivoFilePath);
-                    await deleteFile(vivoVideoPath);
-                } else if (userReply.includes('tim') && userReply.includes('iphone')) {
-                    await simulateTyping(chat, 3040);
+    // Remover o coletor após a primeira resposta
+    client.removeListener('message', collector);
+};
 
-                    try {
-                        // Links para os arquivos no Google Drive
-                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1YgQm1PCm3eLFW0qZ7dgTtVv1a-EBTS2d';
-                        const timFilePath = path.join(__dirname, 'timteste6horas.inpv'); // Caminho para salvar o arquivo .inpv
+client.on('message', collector);
 
-                        // Baixar e enviar o arquivo de configuração
-                        await downloadFile(timFileLink, timFilePath);
-                        const media = MessageMedia.fromFilePath(timFilePath);
-                        await client.sendMessage(response.from, media, { caption: 'Arquivo de configuração para TIM no iPhone' });
-
-                        // Link para o vídeo tutorial
-                        const timVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
-                        const timVideoPath = path.join(__dirname, 'tim_tutorial_video.mp4'); // Caminho para salvar o vídeo
-
-                        // Baixar e enviar o vídeo tutorial
-                        await downloadFile(timVideoLink, timVideoPath);
-                        const timMedia = MessageMedia.fromFilePath(timVideoPath);
-                        await client.sendMessage(response.from, timMedia);
-
-                        // Apagar os arquivos após o envio
-                        await deleteFile(timFilePath);
-                        await deleteFile(timVideoPath);
-                    } catch (err) {
-                        console.error('Erro ao processar o arquivo ou vídeo:', err);
-                    }
-                }
-
-                // Remover o coletor após a primeira resposta
-                client.removeListener('message', collector);
-            };
-
-            client.on('message', collector);
             break;
 		        case '5':
             await simulateTyping(chat, 2220);
