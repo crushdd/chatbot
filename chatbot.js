@@ -91,7 +91,59 @@ client.on('message', async (message) => {
             break;
         case '2':
             await simulateTyping(chat, 2500);
-            await client.sendMessage(message.from, options['Valores dos planos']);
+            await client.sendMessage(
+                message.from,
+                `### *PLANOS SEM ACESSO PARA ROTEAR INTERNET:*
+
+====================== 
+*Plano Mensal:* R$25,00 /mês  
+30 dias de internet ilimitada (sem acesso para rotear para TV/computador/celular)
+
+-------------------------------------------------
+*Plano Bronze* 🥉  
+3 Meses de internet ilimitada por: *R$69,90*  
+(Ficam apenas R$23,30 por mês)
+
+-------------------------------------------------
+*Plano Prata* 🥈  
+6 Meses de internet ilimitada por: *R$129,90*  
+(Ficam apenas R$21,65 por mês)  
++ 1 Mês de Bônus (Pague 6 e Leve 7 meses)
+
+-------------------------------------------------
+*Plano Ouro* 🥇  
+12 Meses de internet ilimitada por: *R$226,90*  
+(Ficam apenas R$18,90 por mês)  
++ 2 Meses de Bônus (Pague 12 e Leve 14 meses)
+
+======================
+
+### *PLANOS COM ACESSO PARA ROTEAR INTERNET:*
+*(DISPONIVEL APENAS PARA PLANOS COMPRADOS PARA ANDROID)*
+
+====================== 
+*Plano Mensal:* R$35,00 /mês  
+30 dias de internet ilimitada + roteamento ilimitado para TV/computador/celular
+
+-------------------------------------------------
+*Plano Bronze* 🥉  
+3 Meses de internet ilimitada + roteamento por: *R$95,00*  
+(Ficam apenas R$31,67 por mês)
+
+-------------------------------------------------
+*Plano Prata* 🥈  
+6 Meses de internet ilimitada + roteamento por: *R$180,00*  
+(Ficam apenas R$30,00 por mês)  
++ 1 Mês de Bônus (Pague 6 e Leve 7 meses)
+
+-------------------------------------------------
+*Plano Ouro* 🥇  
+12 Meses de internet ilimitada + roteamento por: *R$330,00*  
+(Ficam apenas R$27,50 por mês)  
++ 2 Meses de Bônus (Pague 12 e Leve 14 meses)
+
+======================`
+            );
             break;
         case '3':
             await simulateTyping(chat, 3600);
@@ -102,7 +154,7 @@ client.on('message', async (message) => {
             await simulateTyping(chat, 2100);
             await client.sendMessage(
                 message.from,
-                '👤 Usuário: 4000\n🔑 Senha: 4000\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
+                '👤 Usuário: 8428\n🔑 Senha: 8428\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
             );
             await simulateTyping(chat, 3150);
 
@@ -138,8 +190,8 @@ client.on('message', async (message) => {
                     await simulateTyping(chat, 2000);
 
                     // Links para os arquivos no Google Drive
-                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1vB5mAaC8jz9PJqo_EMBesmKIIUawMmWE';
-                    const vivoFilePath = path.join(__dirname, 'vivotestepraiphone.inpv'); // Caminho para salvar o arquivo com extensão .inpv
+                    const vivoFileLink = 'https://drive.google.com/uc?export=download&id=1wCytfm9VdXtfaA76-KLclDev4l_2aleu';
+                    const vivoFilePath = path.join(__dirname, 'vivoteste6horas.inpv'); // Caminho para salvar o arquivo com extensão .inpv
 
                     await downloadFile(vivoFileLink, vivoFilePath); // Baixar arquivo do link
 
@@ -156,16 +208,13 @@ client.on('message', async (message) => {
                     const vivoVideoLink = 'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F';
                     const vivoVideoPath = path.join(__dirname, 'vivo_tutorial_video.mp4');
 
-                    await downloadFile(vivoVideoLink, vivoVideoPath);
-                    const vivoMedia = MessageMedia.fromFilePath(vivoVideoPath);
-                    await client.sendMessage(response.from, vivoMedia, { caption: 'Aqui está o vídeo tutorial para conectar na Vivo no iPhone!' });
                 } else if (userReply.includes('tim') && userReply.includes('iphone')) {
                     await simulateTyping(chat, 3000);
 
                     try {
                         // Links para os arquivos no Google Drive
-                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1oLrl7PMJ4CfCirOB_vZ06UIkgiJAdbL1';
-                        const timFilePath = path.join(__dirname, 'timtestepraiphone.inpv'); // Caminho para salvar o arquivo .inpv
+                        const timFileLink = 'https://drive.google.com/uc?export=download&id=1YgQm1PCm3eLFW0qZ7dgTtVv1a-EBTS2d';
+                        const timFilePath = path.join(__dirname, 'timteste6horas.inpv'); // Caminho para salvar o arquivo .inpv
 
                         // Baixar e enviar o arquivo de configuração
                         await downloadFile(timFileLink, timFilePath);
