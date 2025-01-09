@@ -187,9 +187,9 @@ client.on('message', async (message) => {
 
             // Aguardar a resposta do cliente
             const filter = (response) => response.from === message.from;
-            const collector = client.createMessageCollector(filter, { time: 60000 });
+            const collector = client.on('message', async (response) => {
+                if (response.from !== message.from) return;
 
-            collector.on('collect', async (response) => {
                 const userReply = response.body.toLowerCase();
 
                 // Caso o usuário mencione "vivo iphone"
@@ -247,7 +247,6 @@ client.on('message', async (message) => {
                         console.error('Erro ao processar o arquivo ou vídeo:', err);
                     }
                 }
-                collector.stop();
             });
             break;
         case '5':
