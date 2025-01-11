@@ -82,8 +82,8 @@ client.on('message', async (message) => {
             '8 - Quero me tornar um Revendedor\n' +
             '9 - Tabela de Valores para Revendedores\n' +			
             '10 - Termos de uso' +
-            '11 - Planos IPTV\n' +
-            '12 - Testar IPTV\n'            
+            '11 - Planos IPTV' +
+            '12 - Testar IPTV'            
         );
         return;
     }
