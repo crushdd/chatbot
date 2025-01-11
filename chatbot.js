@@ -80,10 +80,10 @@ client.on('message', async (message) => {
             '6 - Perguntas Frequentes\n' +
             '7 - Falar com um Atendente\n' +
             '8 - Quero me tornar um Revendedor\n' +
-            '9 - Tabela de Valores para Revendedores\n' +			
-            '10 - Termos de uso' +
-            '11 - Planos IPTV' +
-            '12 - Testar IPTV'            
+            '9 - Tabela de Valores para Revendedores\n' +		
+            '10 - Termos de uso\n' +
+            '11 - Planos IPTV\n' +
+            '12 - Testar IPTV'    
         );
         return;
     }
@@ -302,71 +302,7 @@ Caso tenha mais dúvidas, entre em contato conosco. Estamos à disposição para
             await simulateTyping(chat, 4100);
             await client.sendMessage(
                 message.from,
-                `📲 SPEEDNET - SOLUÇÕES EM VPN 📡
-
-*INFORMAÇÕES PARA NOVOS CLIENTES*
-Quer revender nossos serviços? Escolha seu plano de revendedor logo abaixo:
-
-🚀 PLANOS PARA REVENDER APENAS PARA *ANDROID* 🚀
-*Operadoras disponíveis:*
-- *Tim* ✅
-- *VIVO (funcionando normalmente).* ✅
-
-*Preços por quantidade de créditos no painel (sem acesso ao servidor iPhone):*
-- *10 a 49 créditos/unidades*: R$ 4,00 cada
-- *50 a 99 créditos/unidades*: R$ 3,00 cada
-- *100 a 299 créditos/unidades*: R$ 2,50 cada
-- *300 a 499 créditos/unidades*: R$ 2,00 cada
-- *500 ou mais créditos/unidades*: R$ 1,50 cada
-
-➡️ *Obs:* Ao comprar em maior quantidade, o valor de cada crédito fica mais barato. Por exemplo: adquirindo acima de 49 créditos, cada um sai por R$ 3,00; comprando acima de 99 créditos, o valor reduz para R$ 2,50 cada, e assim por diante.
-
-*📆 Pagamento mensal obrigatório*
-
----
-
-🚀 PLANOS PARA *IPHONE + ANDROID* 🚀
-*Operadoras disponíveis:*
-- *Tim* ✅
-- *VIVO (funcionando normalmente).* ✅
-
-*Preços por quantidade de créditos no painel (com acesso ao servidor iPhone):*
-- *10 a 49 créditos*: R$ 4,50 cada
-- *50 a 99 créditos*: R$ 3,50 cada
-- *100 a 299 créditos*: R$ 3,00 cada
-- *300 a 499 créditos*: R$ 2,00 cada
-- *500 ou mais créditos*: R$ 1,50 cada
-
-➡️ *Obs:* Ao comprar em maior quantidade, o valor de cada crédito fica mais barato. Por exemplo: adquirindo acima de 49 créditos, cada um sai por R$ 3,50; comprando acima de 99 créditos, o valor reduz para R$ 3,00 cada, e assim por diante.
-
-*📆 Pagamento mensal obrigatório*
-
----
-
-COMO ADQUIRIR SEU PLANO:
-1. Escolha seu plano Android ou iPhone.
-2. Realize o pagamento via:
-   - *🏦 Banco:* Nubank
-   - *💠 PIX:* speednetservicec@gmail.com
-3. Envie o comprovante de pagamento.
-
-*📥 Liberação imediata do painel após envio do comprovante.*
-
----
-
-*SUPORTE:*
-- Acesse nossos grupos no WhatsApp para suporte e atendimento exclusivo para clientes.
-
-*MATERIAL PARA DIVULGAÇÃO:*
-- Após adquirir a revenda, fornecemos banners e vídeos exclusivos para facilitar sua divulgação e atrair mais clientes.
-
----
-
-*✅ Garantimos a qualidade do serviço.*
-
-*❌ Não realizamos devolução do valor investido.*
-
-Seja bem-vindo(a) ao *SpeedNet - Soluções em VPN!* ✌️`
+                `📲 SPEEDNET - * ✌️`
             );
             break;
         case '10':
@@ -374,67 +310,6 @@ Seja bem-vindo(a) ao *SpeedNet - Soluções em VPN!* ✌️`
             await client.sendMessage(
                 message.from,
                 `*TERMOS DE USO – HYPER NET*
-
-Bem-vindo à *HYPER NET*, fornecedora de internet via aplicativos VPN. Ao utilizar nossos serviços, você concorda integralmente com os termos e condições descritos abaixo. Leia atentamente para evitar dúvidas ou desentendimentos futuros.
-
----
-
-⚠️ *SOBRE O SERVIÇO* ⚠️
-A *HYPER NET* oferece conexão à internet utilizando VPN, que funciona de forma diferente das conexões Wi-Fi tradicionais. É possível acessar jogos, realizar ligações via WhatsApp e usar serviços de streaming, mas *não garantimos uma experiência idêntica à de uma conexão Wi-Fi*.
-
-Se você precisa de:
-- *Ping abaixo de 100ms para jogos online*;
-- *Streaming em qualidade 4K sem interrupções*;
-- *Downloads de arquivos grandes via torrent*;
-
-*Recomendamos contratar um serviço de Wi-Fi de um provedor local.* Essa informação deve ser repassada aos clientes antes da compra para evitar frustrações e mal-entendidos.
-
----
-
-⭐ *SUPORTE* ⭐
-1. *Treinamento e Instruções:* Ajudamos a configurar os aplicativos e o painel do revendedor. Caso o serviço apresente problemas, entre em contato para análise.
-2. *Limitações:*
-   - Problemas de lentidão, manutenção na rede, ou bloqueios da operadora não estão sob nossa responsabilidade.
-   - Se houver instabilidade na rede da operadora, nossa equipe orientará sobre possíveis soluções, mas *não podemos garantir suporte em questões externas à VPN.*
-3. *Responsabilidade do Revendedor:*
-   - Revendedores precisam compreender e solucionar problemas comuns. Caso a solução já tenha sido ensinada previamente, não responderemos questões repetidas.
-   - *Leitura obrigatória do grupo de avisos:* Todas as atualizações são publicadas no grupo. Questões já esclarecidas lá não serão respondidas novamente.
-
-⚠️ *Respeite a ordem de atendimento.* Flood de mensagens ou chamadas repetidas atrasam o suporte.
-
----
-
-⭐ *GARANTIAS* ⭐
-1. O serviço contratado é válido por 30 dias. Caso o método de conexão seja bloqueado pela operadora antes desse prazo, os dias perdidos serão repostos sem custo adicional.
-2. *Importante:* Bloqueios da operadora podem ocorrer em determinadas regiões ou estados, afetando todos os usuários. Esse tipo de interrupção está fora do nosso controle.
-
----
-
-⭐ *REEMBOLSO* ⭐
-- Oferecemos *testes gratuitos* antes da compra para uso pessoal ou revenda.
-- Por se tratar de um produto digital, não realizamos reembolsos totais ou parciais após a compra.
-
----
-
-⭐ *REGRAS DE USO* ⭐
-
-1. *Dispositivos Limitados:* Respeite o limite contratado. O uso indevido em múltiplos dispositivos pode acarretar suspensão do serviço.
-2. *Proibição de Torrents e P2P:* O uso desses serviços sobrecarrega os servidores e prejudica todos os usuários.
-3. *Atividades Ilícitas:* É proibido utilizar o serviço para ataques DDoS, carding ou qualquer crime cibernético.
-4. *Citação de Outros Serviços:* É proibido divulgar concorrentes em grupos ou contatar outros revendedores para vendas não autorizadas.
-5. *Vendas Não Autorizadas:* A comercialização de produtos não relacionados, como IPTV, em nossos grupos ou privados, é terminantemente proibida.
-
-⚠️ *Penalidades:* O descumprimento de qualquer regra resultará no cancelamento do acesso sem aviso prévio, reembolso ou reativação da conta.
-
----
-
-*ATENÇÃO, REVENDEDORES*
-1. *Logins acima de 30 dias não são permitidos sem autorização prévia.* Logins longos sobrecarregam os servidores. A detecção de logins irregulares resultará na exclusão automática do acesso.
-2. *Seja proativo:* Leia os avisos no grupo e evite dependência excessiva do suporte. Quanto mais informado você estiver, mais rápido conseguirá atender seus clientes.
-
----
-
-Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência possível dentro das limitações do serviço. Para dúvidas adicionais, entre em contato. 🚀`
             );
             break;
 		case '11':
