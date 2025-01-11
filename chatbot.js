@@ -81,7 +81,9 @@ client.on('message', async (message) => {
             '7 - Falar com um Atendente\n' +
             '8 - Quero me tornar um Revendedor\n' +
             '9 - Tabela de Valores para Revendedores\n' +			
-            '10 - Termos de uso'
+            '10 - Termos de uso' +
+            '11 - Planos IPTV\n' +
+            '12 - Testar IPTV\n'            
         );
         return;
     }
@@ -435,12 +437,48 @@ Se você precisa de:
 Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência possível dentro das limitações do serviço. Para dúvidas adicionais, entre em contato. 🚀`
             );
             break;
+		case '11':
+            await simulateTyping(chat, 3000);
+            await client.sendMessage(
+                message.from,
+                'Aproveite agora a melhor IPTV do Brasil por apenas R$30,00/mês! 🔥 Uma oferta imperdível e por tempo limitado!\n\n' +
+                'Quer testar antes? Digite "12" e ganhe 6 horas de acesso gratuito! Não perca essa chance!'
+            );
+
+            // Baixar e enviar a imagem
+            const imageLink = 'https://drive.google.com/uc?export=download&id=1DnD0Z7bfoeEC1kZfemZswrbwqJzeOe-t';
+            const imageFilePath = path.join(__dirname, 'iptv_image.jpg');
+            await downloadFile(imageLink, imageFilePath);
+            const imageMedia = MessageMedia.fromFilePath(imageFilePath);
+            await client.sendMessage(message.from, imageMedia);
+
+            // Baixar e enviar o vídeo
+            const videoLinkIptv = 'https://drive.google.com/uc?export=download&id=1VOLQ9aeI-FlxfyHC46zsWbScNewZGX30';
+            const videoFilePathIptv = path.join(__dirname, 'iptv_video.mp4');
+            await downloadFile(videoLinkIptv, videoFilePathIptv);
+            const videoMediaIptv = MessageMedia.fromFilePath(videoFilePathIptv);
+            await client.sendMessage(message.from, videoMediaIptv);
+
+            // Apagar os arquivos locais após o envio
+            await deleteFile(imageFilePath);
+            await deleteFile(videoFilePathIptv);
+            break;
         default:
             await simulateTyping(chat, 1500);
-            // Linha removida
             break;
-    }
-});
-
-// Inicializar cliente WhatsApp
-client.initialize();	
+        case '12':
+            await simulateTyping(chat, 1500);
+            await client.sendMessage(
+                    message.from,
+                    'Para liberarmos um teste, precisamos saber onde você deseja testar. Será em uma TV? Qual o modelo da sua TV? Ou será em um dispositivo Android ou iPhone? Basta nos informar e tentaremos enviar o teste o mais rápido possível após recebermos sua resposta.'
+            );
+            break;
+        default:
+            await simulateTyping(chat, 1500);
+            break;
+        }
+    });
+    
+    // Inicializar cliente WhatsApp
+    client.initialize();
+        
