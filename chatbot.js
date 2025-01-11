@@ -463,9 +463,6 @@ Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência
             await deleteFile(imageFilePath);
             await deleteFile(videoFilePathIptv);
             break;
-        default:
-            await simulateTyping(chat, 1500);
-            break;
         case '12':
             await simulateTyping(chat, 1500);
             await client.sendMessage(
