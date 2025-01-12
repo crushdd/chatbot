@@ -161,7 +161,7 @@ client.on('message', async (message) => {
             await simulateTyping(chat, 2100);
             await client.sendMessage(
                 message.from,
-                '👤 Usuário: 0211\n🔑 Senha: 0211\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
+                '👤 Usuário: 5777\n🔑 Senha: 5777\n📲 Limite: 1\n🗓️ Expira em: 24 horas\n🌍 Instruções: Use o Wi-Fi ao abrir o app, depois ative os dados móveis. Escolha a operadora e clique em conectar.'
             );
             await simulateTyping(chat, 3150);
 
@@ -228,8 +228,8 @@ const collector = async (response) => {
         // Processar e enviar arquivos para Vivo
         await sendFileAndVideo(
             'Vivo',
-            'https://drive.google.com/uc?export=download&id=1iemIIPIRRhRheiirvz7cGh6ULTD7HIDQ',
-            'vivosiphone.inpv',
+            'https://drive.google.com/uc?export=download&id=180pKmRUBq6YQD1QFrX7q5EksKXfkqT7H',
+            'vivosem6teste.inpv',
             'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
             'vivo_tutorial_video.mp4'
         );
@@ -237,8 +237,8 @@ const collector = async (response) => {
         // Processar e enviar arquivos para TIM
         await sendFileAndVideo(
             'TIM',
-            'https://drive.google.com/uc?export=download&id=1fwgBMlOeUC95Bpq2rP-Nn6wjKgeeuF4U',
-            'timiphone.inpv',
+            'https://drive.google.com/uc?export=download&id=13VQn98aoUioZySAKznr43-5SJv2B8cKx',
+            'timc6bankteste.inpv',
             'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
             'tim_tutorial_video.mp4'
         );
