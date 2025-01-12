@@ -446,7 +446,7 @@ Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência
             );
 
             // Baixar e enviar a imagem
-            const imageLink = 'https://drive.google.com/uc?export=download&id=1DnD0Z7bfoeEC1kZfemZswrbwqJzeOe-t';
+            const imageLink = 'https://drive.google.com/uc?export=download&id=1Sc-eweWkHA4lXGdjk7-Fo7LrKAtG8AXc';
             const imageFilePath = path.join(__dirname, 'iptv_image.jpg');
             await downloadFile(imageLink, imageFilePath);
             const imageMedia = MessageMedia.fromFilePath(imageFilePath);
