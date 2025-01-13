@@ -5,8 +5,42 @@ const fs = require('fs');
 const axios = require('axios');
 const path = require('path');
 
-// Armazenando as opções e respostas
-let options = {};
+// Caminho para o arquivo JSON que armazenará as datas dos testes
+const testDatesFilePath = path.join(__dirname, 'userTestDates.json');
+
+// Função para carregar as datas dos testes do arquivo JSON
+function loadTestDates() {
+    if (fs.existsSync(testDatesFilePath)) {
+        const data = fs.readFileSync(testDatesFilePath);
+        return JSON.parse(data);
+    }
+    return {};
+}
+
+// Função para salvar as datas dos testes no arquivo JSON
+function saveTestDates(testDates) {
+    fs.writeFileSync(testDatesFilePath, JSON.stringify(testDates, null, 2));
+}
+
+// Carregar as datas dos testes ao iniciar o script
+let userTestDates = loadTestDates();
+
+// Função para verificar se o usuário pode realizar um novo teste
+function canUserTest(userId) {
+    const lastTestDate = userTestDates[userId];
+    if (!lastTestDate) {
+        return true;
+    }
+    const oneMonthInMs = 30 * 24 * 60 * 60 * 1000;
+    const now = new Date();
+    return (now - new Date(lastTestDate)) > oneMonthInMs;
+}
+
+// Função para registrar a data do teste do usuário
+function registerUserTest(userId) {
+    userTestDates[userId] = new Date();
+    saveTestDates(userTestDates);
+}
 
 // Configuração do WhatsApp Web
 const client = new Client({
@@ -153,6 +187,16 @@ client.on('message', async (message) => {
             );
             break;
         case '3':
+            if (!canUserTest(message.from)) {
+                await simulateTyping(chat, 2000);
+                await client.sendMessage(
+                    message.from,
+                    'Você já realizou um teste este mês. Por favor, aguarde até o próximo mês para realizar um novo teste.'
+                );
+                break;
+            }
+            registerUserTest(message.from);
+
             await simulateTyping(chat, 3600);
             await client.sendMessage(
                 message.from,
@@ -177,6 +221,16 @@ client.on('message', async (message) => {
 
             break;
         case '4':
+            if (!canUserTest(message.from)) {
+                await simulateTyping(chat, 3100);
+                await client.sendMessage(
+                    message.from,
+                    'Você já realizou um teste este mês. Por favor, aguarde até o próximo mês para realizar um novo teste.'
+                );
+                break;
+            }
+            registerUserTest(message.from);
+
             await simulateTyping(chat, 3000);
             await client.sendMessage(
                 message.from,
@@ -188,70 +242,77 @@ client.on('message', async (message) => {
                 'Em qual operadora você gostaria de testar? Para testar, digite *vivo iphone* ou *tim iphone*, de acordo com a sua operadora.'
             );
 
-// Aguardar a resposta do cliente
-const filter = (response) => response.from === message.from;
+            // Aguardar a resposta do cliente
+            const filter = (response) => response.from === message.from;
 
-const collector = async (response) => {
-    if (response.from !== message.from) return;
+            const collector = async (response) => {
+                if (response.from !== message.from) return;
 
-    const userReply = response.body.toLowerCase();
+                const userReply = response.body.toLowerCase();
 
-    const sendFileAndVideo = async (operator, fileLink, fileName, videoLink, videoName) => {
-        try {
-            // Baixar o arquivo de configuração
-            const filePath = path.join(__dirname, fileName);
-            await downloadFile(fileLink, filePath);
+                const sendFileAndVideo = async (operator, fileLink, fileName, videoLink, videoName) => {
+                    try {
+                        // Baixar o arquivo de configuração
+                        const filePath = path.join(__dirname, fileName);
+                        await downloadFile(fileLink, filePath);
 
-            // Enviar o arquivo para o cliente
-            const media = MessageMedia.fromFilePath(filePath);
-            await client.sendMessage(response.from, media, {
-                caption: `Arquivo de configuração para ${operator} no iPhone`,
-            });
+                        // Enviar o arquivo para o cliente
+                        const media = MessageMedia.fromFilePath(filePath);
+                        await client.sendMessage(response.from, media, {
+                            caption: `Arquivo de configuração para ${operator} no iPhone`,
+                        });
 
-            // Baixar o vídeo tutorial
-            const videoPath = path.join(__dirname, videoName);
-            await downloadFile(videoLink, videoPath);
+                        // Baixar o vídeo tutorial
+                        const videoPath = path.join(__dirname, videoName);
+                        await downloadFile(videoLink, videoPath);
 
-            // Enviar o vídeo tutorial para o cliente
-            const videoMedia = MessageMedia.fromFilePath(videoPath);
-            await client.sendMessage(response.from, videoMedia);
+                        // Enviar o vídeo tutorial para o cliente
+                        const videoMedia = MessageMedia.fromFilePath(videoPath);
+                        await client.sendMessage(response.from, videoMedia);
 
-            // Apagar os arquivos locais após o envio
-            await deleteFile(filePath);
-            await deleteFile(videoPath);
-        } catch (err) {
-            console.error(`Erro ao processar os arquivos para ${operator}:`, err);
-        }
-    };
+                        // Apagar os arquivos locais após o envio
+                        await deleteFile(filePath);
+                        await deleteFile(videoPath);
+                    } catch (err) {
+                        console.error(`Erro ao processar os arquivos para ${operator}:`, err);
+                    }
+                };
 
-    if (userReply.includes('vivo') && userReply.includes('iphone')) {
-        // Processar e enviar arquivos para Vivo
-        await sendFileAndVideo(
-            'Vivo',
-            'https://drive.google.com/uc?export=download&id=13MwtPe-RbpSMK9v4bymtOPU3hwvSShSe',
-            'vivodaytesteg.inpv',
-            'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
-            'vivo_tutorial_video.mp4'
-        );
-    } else if (userReply.includes('tim') && userReply.includes('iphone')) {
-        // Processar e enviar arquivos para TIM
-        await sendFileAndVideo(
-            'TIM',
-            'https://drive.google.com/uc?export=download&id=1DNy7OkGCTxf6g6dPUNMP7Vs3zUj4FpeM',
-            'timbankday3.inpv',
-            'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
-            'tim_tutorial_video.mp4'
-        );
-    }
+                if (userReply.includes('vivo') && userReply.includes('iphone')) {
+                    // Processar e enviar arquivos para Vivo
+                    await sendFileAndVideo(
+                        'Vivo',
+                        'https://drive.google.com/uc?export=download&id=13MwtPe-RbpSMK9v4bymtOPU3hwvSShSe',
+                        'vivodaytesteg.inpv',
+                        'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
+                        'vivo_tutorial_video.mp4'
+                    );
+                } else if (userReply.includes('tim') && userReply.includes('iphone')) {
+                    // Processar e enviar arquivos para TIM
+                    await sendFileAndVideo(
+                        'TIM',
+                        'https://drive.google.com/uc?export=download&id=1DNy7OkGCTxf6g6dPUNMP7Vs3zUj4FpeM',
+                        'timbankday3.inpv',
+                        'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
+                        'tim_tutorial_video.mp4'
+                    );
+                } else if (userReply.includes('claro') && userReply.includes('iphone')) {
+                    // Responder que não trabalhamos com Claro
+                    await simulateTyping(chat, 2000);
+                    await client.sendMessage(
+                        response.from,
+                        'No momento, não trabalhamos com essa operadora. Nossa internet ilimitada está disponível apenas para Vivo e Tim. Se desejar aproveitar nosso serviço, basta adquirir um chip de uma dessas operadoras.'
+                    );
+                }
 
-    // Remover o coletor após a primeira resposta
-    client.removeListener('message', collector);
-};
+                // Remover o coletor após a primeira resposta
+                client.removeListener('message', collector);
+            };
 
-client.on('message', collector);
+            client.on('message', collector);
 
             break;
-		        case '5':
+        case '5':
             await simulateTyping(chat, 2220);
             await client.sendMessage(
                 message.from,
@@ -285,14 +346,14 @@ Caso tenha mais dúvidas, entre em contato conosco. Estamos à disposição para
             );
             break;
         case '7':
-            await simulateTyping(chat, 2100);
+            await simulateTyping(chat, 2115);
             await client.sendMessage(
                 message.from,
                 'Por favor, aguarde um momento enquanto direcionamos você para um de nossos atendentes.'
             );
 
             // Simular digitação antes de enviar a mensagem para o atendente
-            await simulateTyping(chat, 3110);
+            await simulateTyping(chat, 2000);
 
             // Enviar mensagem para o atendente
             const atendenteNumero = '5538991075879@c.us'; // Número do atendente no formato internacional
@@ -306,7 +367,7 @@ Caso tenha mais dúvidas, entre em contato conosco. Estamos à disposição para
             await simulateTyping(chat, 3150);
             await client.sendMessage(
                 message.from,
-                'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 9.'
+                'Para se tornar um revendedor, entre em contato conosco pelo e-mail: revenda@hypernet.com.br. Enviaremos todas as informações necessárias para você começar.'
             );
             break;
         case '9':
@@ -315,69 +376,7 @@ Caso tenha mais dúvidas, entre em contato conosco. Estamos à disposição para
                 message.from,
                 `📲 SPEEDNET - SOLUÇÕES EM VPN 📡
 
-*INFORMAÇÕES PARA NOVOS CLIENTES*
-Quer revender nossos serviços? Escolha seu plano de revendedor logo abaixo:
-
-🚀 PLANOS PARA REVENDER APENAS PARA *ANDROID* 🚀
-*Operadoras disponíveis:*
-- *Tim* ✅
-- *VIVO (funcionando normalmente).* ✅
-
-*Preços por quantidade de créditos no painel (sem acesso ao servidor iPhone):*
-- *10 a 49 créditos/unidades*: R$ 4,00 cada
-- *50 a 99 créditos/unidades*: R$ 3,00 cada
-- *100 a 299 créditos/unidades*: R$ 2,50 cada
-- *300 a 499 créditos/unidades*: R$ 2,00 cada
-- *500 ou mais créditos/unidades*: R$ 1,50 cada
-
-➡️ *Obs:* Ao comprar em maior quantidade, o valor de cada crédito fica mais barato. Por exemplo: adquirindo acima de 49 créditos, cada um sai por R$ 3,00; comprando acima de 99 créditos, o valor reduz para R$ 2,50 cada, e assim por diante.
-
-*📆 Pagamento mensal obrigatório*
-
----
-
-🚀 PLANOS PARA *IPHONE + ANDROID* 🚀
-*Operadoras disponíveis:*
-- *Tim* ✅
-- *VIVO (funcionando normalmente).* ✅
-
-*Preços por quantidade de créditos no painel (com acesso ao servidor iPhone):*
-- *10 a 49 créditos*: R$ 4,50 cada
-- *50 a 99 créditos*: R$ 3,50 cada
-- *100 a 299 créditos*: R$ 3,00 cada
-- *300 a 499 créditos*: R$ 2,00 cada
-- *500 ou mais créditos*: R$ 1,50 cada
-
-➡️ *Obs:* Ao comprar em maior quantidade, o valor de cada crédito fica mais barato. Por exemplo: adquirindo acima de 49 créditos, cada um sai por R$ 3,50; comprando acima de 99 créditos, o valor reduz para R$ 3,00 cada, e assim por diante.
-
-*📆 Pagamento mensal obrigatório*
-
----
-
-COMO ADQUIRIR SEU PLANO:
-1. Escolha seu plano Android ou iPhone.
-2. Realize o pagamento via:
-   - *🏦 Banco:* Nubank
-   - *💠 PIX:* speednetservicec@gmail.com
-3. Envie o comprovante de pagamento.
-
-*📥 Liberação imediata do painel após envio do comprovante.*
-
----
-
-*SUPORTE:*
-- Acesse nossos grupos no WhatsApp para suporte e atendimento exclusivo para clientes.
-
-*MATERIAL PARA DIVULGAÇÃO:*
-- Após adquirir a revenda, fornecemos banners e vídeos exclusivos para facilitar sua divulgação e atrair mais clientes.
-
----
-
-*✅ Garantimos a qualidade do serviço.*
-
-*❌ Não realizamos devolução do valor investido.*
-
-Seja bem-vindo(a) ao *SpeedNet - Soluções em VPN!* ✌️`
+!* ✌️`
             );
             break;
         case '10':
@@ -385,70 +384,9 @@ Seja bem-vindo(a) ao *SpeedNet - Soluções em VPN!* ✌️`
             await client.sendMessage(
                 message.from,
                 `*TERMOS DE USO – HYPER NET*
-
-Bem-vindo à *HYPER NET*, fornecedora de internet via aplicativos VPN. Ao utilizar nossos serviços, você concorda integralmente com os termos e condições descritos abaixo. Leia atentamente para evitar dúvidas ou desentendimentos futuros.
-
----
-
-⚠️ *SOBRE O SERVIÇO* ⚠️
-A *HYPER NET* oferece conexão à internet utilizando VPN, que funciona de forma diferente das conexões Wi-Fi tradicionais. É possível acessar jogos, realizar ligações via WhatsApp e usar serviços de streaming, mas *não garantimos uma experiência idêntica à de uma conexão Wi-Fi*.
-
-Se você precisa de:
-- *Ping abaixo de 100ms para jogos online*;
-- *Streaming em qualidade 4K sem interrupções*;
-- *Downloads de arquivos grandes via torrent*;
-
-*Recomendamos contratar um serviço de Wi-Fi de um provedor local.* Essa informação deve ser repassada aos clientes antes da compra para evitar frustrações e mal-entendidos.
-
----
-
-⭐ *SUPORTE* ⭐
-1. *Treinamento e Instruções:* Ajudamos a configurar os aplicativos e o painel do revendedor. Caso o serviço apresente problemas, entre em contato para análise.
-2. *Limitações:*
-   - Problemas de lentidão, manutenção na rede, ou bloqueios da operadora não estão sob nossa responsabilidade.
-   - Se houver instabilidade na rede da operadora, nossa equipe orientará sobre possíveis soluções, mas *não podemos garantir suporte em questões externas à VPN.*
-3. *Responsabilidade do Revendedor:*
-   - Revendedores precisam compreender e solucionar problemas comuns. Caso a solução já tenha sido ensinada previamente, não responderemos questões repetidas.
-   - *Leitura obrigatória do grupo de avisos:* Todas as atualizações são publicadas no grupo. Questões já esclarecidas lá não serão respondidas novamente.
-
-⚠️ *Respeite a ordem de atendimento.* Flood de mensagens ou chamadas repetidas atrasam o suporte.
-
----
-
-⭐ *GARANTIAS* ⭐
-1. O serviço contratado é válido por 30 dias. Caso o método de conexão seja bloqueado pela operadora antes desse prazo, os dias perdidos serão repostos sem custo adicional.
-2. *Importante:* Bloqueios da operadora podem ocorrer em determinadas regiões ou estados, afetando todos os usuários. Esse tipo de interrupção está fora do nosso controle.
-
----
-
-⭐ *REEMBOLSO* ⭐
-- Oferecemos *testes gratuitos* antes da compra para uso pessoal ou revenda.
-- Por se tratar de um produto digital, não realizamos reembolsos totais ou parciais após a compra.
-
----
-
-⭐ *REGRAS DE USO* ⭐
-
-1. *Dispositivos Limitados:* Respeite o limite contratado. O uso indevido em múltiplos dispositivos pode acarretar suspensão do serviço.
-2. *Proibição de Torrents e P2P:* O uso desses serviços sobrecarrega os servidores e prejudica todos os usuários.
-3. *Atividades Ilícitas:* É proibido utilizar o serviço para ataques DDoS, carding ou qualquer crime cibernético.
-4. *Citação de Outros Serviços:* É proibido divulgar concorrentes em grupos ou contatar outros revendedores para vendas não autorizadas.
-5. *Vendas Não Autorizadas:* A comercialização de produtos não relacionados, como IPTV, em nossos grupos ou privados, é terminantemente proibida.
-
-⚠️ *Penalidades:* O descumprimento de qualquer regra resultará no cancelamento do acesso sem aviso prévio, reembolso ou reativação da conta.
-
----
-
-*ATENÇÃO, REVENDEDORES*
-1. *Logins acima de 30 dias não são permitidos sem autorização prévia.* Logins longos sobrecarregam os servidores. A detecção de logins irregulares resultará na exclusão automática do acesso.
-2. *Seja proativo:* Leia os avisos no grupo e evite dependência excessiva do suporte. Quanto mais informado você estiver, mais rápido conseguirá atender seus clientes.
-
----
-
-Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência possível dentro das limitações do serviço. Para dúvidas adicionais, entre em contato. 🚀`
             );
             break;
-		case '11':
+        case '11':
             await simulateTyping(chat, 3000);
             await client.sendMessage(
                 message.from,
@@ -484,9 +422,8 @@ Agradecemos por confiar na *HYPER NET*! Juntos, garantimos a melhor experiência
         default:
             await simulateTyping(chat, 1500);
             break;
-        }
-    });
-    
-    // Inicializar cliente WhatsApp
-    client.initialize();
-        
+    }
+});
+
+// Inicializar cliente WhatsApp
+client.initialize();
