@@ -5,29 +5,31 @@ const fs = require('fs');
 const axios = require('axios');
 const path = require('path');
 
-// Caminho para o arquivo JSON que armazenará as datas dos testes
-const testDatesFilePath = path.join(__dirname, 'userTestDates.json');
+// Caminhos para os arquivos JSON que armazenarão as datas dos testes
+const androidTestDatesFilePath = path.join(__dirname, 'androidTestDates.json');
+const iphoneTestDatesFilePath = path.join(__dirname, 'iphoneTestDates.json');
 
 // Função para carregar as datas dos testes do arquivo JSON
-function loadTestDates() {
-    if (fs.existsSync(testDatesFilePath)) {
-        const data = fs.readFileSync(testDatesFilePath);
+function loadTestDates(filePath) {
+    if (fs.existsSync(filePath)) {
+        const data = fs.readFileSync(filePath);
         return JSON.parse(data);
     }
     return {};
 }
 
 // Função para salvar as datas dos testes no arquivo JSON
-function saveTestDates(testDates) {
-    fs.writeFileSync(testDatesFilePath, JSON.stringify(testDates, null, 2));
+function saveTestDates(filePath, testDates) {
+    fs.writeFileSync(filePath, JSON.stringify(testDates, null, 2));
 }
 
 // Carregar as datas dos testes ao iniciar o script
-let userTestDates = loadTestDates();
+let androidTestDates = loadTestDates(androidTestDatesFilePath);
+let iphoneTestDates = loadTestDates(iphoneTestDatesFilePath);
 
 // Função para verificar se o usuário pode realizar um novo teste
-function canUserTest(userId) {
-    const lastTestDate = userTestDates[userId];
+function canUserTest(userId, testDates) {
+    const lastTestDate = testDates[userId];
     if (!lastTestDate) {
         return true;
     }
@@ -37,9 +39,9 @@ function canUserTest(userId) {
 }
 
 // Função para registrar a data do teste do usuário
-function registerUserTest(userId) {
-    userTestDates[userId] = new Date();
-    saveTestDates(userTestDates);
+function registerUserTest(userId, testDates, filePath) {
+    testDates[userId] = new Date();
+    saveTestDates(filePath, testDates);
 }
 
 // Configuração do WhatsApp Web
@@ -187,7 +189,7 @@ client.on('message', async (message) => {
             );
             break;
         case '3':
-            if (!canUserTest(message.from)) {
+            if (!canUserTest(message.from, androidTestDates)) {
                 await simulateTyping(chat, 2000);
                 await client.sendMessage(
                     message.from,
@@ -195,7 +197,7 @@ client.on('message', async (message) => {
                 );
                 break;
             }
-            registerUserTest(message.from);
+            registerUserTest(message.from, androidTestDates, androidTestDatesFilePath);
 
             await simulateTyping(chat, 3600);
             await client.sendMessage(
@@ -220,99 +222,95 @@ client.on('message', async (message) => {
             await client.sendMessage(message.from, media, { caption: 'Vídeo ensinando como conectar no aplicativo!' });
 
             break;
-        case '4':
-            if (!canUserTest(message.from)) {
-                await simulateTyping(chat, 3100);
-                await client.sendMessage(
-                    message.from,
-                    'Você já realizou um teste este mês. Por favor, aguarde até o próximo mês para realizar um novo teste.'
-                );
-                break;
-            }
-            registerUserTest(message.from);
-
-            await simulateTyping(chat, 3000);
-            await client.sendMessage(
-                message.from,
-                'Por favor, *BAIXE* este aplicativo: https://apps.apple.com/app/napsternetv/id1629465476.'
-            );
-            await simulateTyping(chat, 3500); // Pausa antes de enviar a próxima mensagem
-            await client.sendMessage(
-                message.from,
-                'Em qual operadora você gostaria de testar? Para testar, digite *vivo iphone* ou *tim iphone*, de acordo com a sua operadora.'
-            );
-
-            // Aguardar a resposta do cliente
-            const filter = (response) => response.from === message.from;
-
-            const collector = async (response) => {
-                if (response.from !== message.from) return;
-
-                const userReply = response.body.toLowerCase();
-
-                const sendFileAndVideo = async (operator, fileLink, fileName, videoLink, videoName) => {
-                    try {
-                        // Baixar o arquivo de configuração
-                        const filePath = path.join(__dirname, fileName);
-                        await downloadFile(fileLink, filePath);
-
-                        // Enviar o arquivo para o cliente
-                        const media = MessageMedia.fromFilePath(filePath);
-                        await client.sendMessage(response.from, media, {
-                            caption: `Arquivo de configuração para ${operator} no iPhone`,
-                        });
-
-                        // Baixar o vídeo tutorial
-                        const videoPath = path.join(__dirname, videoName);
-                        await downloadFile(videoLink, videoPath);
-
-                        // Enviar o vídeo tutorial para o cliente
-                        const videoMedia = MessageMedia.fromFilePath(videoPath);
-                        await client.sendMessage(response.from, videoMedia);
-
-                        // Apagar os arquivos locais após o envio
-                        await deleteFile(filePath);
-                        await deleteFile(videoPath);
-                    } catch (err) {
-                        console.error(`Erro ao processar os arquivos para ${operator}:`, err);
-                    }
-                };
-
-                if (userReply.includes('vivo') && userReply.includes('iphone')) {
-                    // Processar e enviar arquivos para Vivo
-                    await sendFileAndVideo(
-                        'Vivo',
-                        'https://drive.google.com/uc?export=download&id=13MwtPe-RbpSMK9v4bymtOPU3hwvSShSe',
-                        'vivodaytesteg.inpv',
-                        'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
-                        'vivo_tutorial_video.mp4'
-                    );
-                } else if (userReply.includes('tim') && userReply.includes('iphone')) {
-                    // Processar e enviar arquivos para TIM
-                    await sendFileAndVideo(
-                        'TIM',
-                        'https://drive.google.com/uc?export=download&id=1DNy7OkGCTxf6g6dPUNMP7Vs3zUj4FpeM',
-                        'timbankday3.inpv',
-                        'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
-                        'tim_tutorial_video.mp4'
-                    );
-                } else if (userReply.includes('claro') && userReply.includes('iphone')) {
-                    // Responder que não trabalhamos com Claro
+            case '4':
+                if (!canUserTest(message.from, iphoneTestDates)) {
                     await simulateTyping(chat, 2000);
                     await client.sendMessage(
-                        response.from,
-                        'No momento, não trabalhamos com essa operadora. Nossa internet ilimitada está disponível apenas para Vivo e Tim. Se desejar aproveitar nosso serviço, basta adquirir um chip de uma dessas operadoras.'
+                        message.from,
+                        'Você já realizou um teste este mês. Por favor, aguarde até o próximo mês para realizar um novo teste.'
                     );
+                    break;
                 }
-
-                // Remover o coletor após a primeira resposta
-                client.removeListener('message', collector);
-            };
-
-            client.on('message', collector);
-
-            break;
-        case '5':
+            
+                // Não registrar data ainda, aguardar a resposta do cliente
+                await simulateTyping(chat, 3000);
+                await client.sendMessage(
+                    message.from,
+                    'Por favor, *BAIXE* este aplicativo: https://apps.apple.com/app/napsternetv/id1629465476.'
+                );
+                await simulateTyping(chat, 3500);
+                await client.sendMessage(
+                    message.from,
+                    'Em qual operadora você gostaria de testar? Para testar, digite *vivo iphone* ou *tim iphone*, de acordo com a sua operadora.'
+                );
+            
+                const filter = (response) => response.from === message.from;
+            
+                const collector = async (response) => {
+                    if (response.from !== message.from) return;
+            
+                    const userReply = response.body.toLowerCase();
+            
+                    const sendFileAndVideo = async (operator, fileLink, fileName, videoLink, videoName) => {
+                        try {
+                            const filePath = path.join(__dirname, fileName);
+                            await downloadFile(fileLink, filePath);
+            
+                            const media = MessageMedia.fromFilePath(filePath);
+                            await client.sendMessage(response.from, media, {
+                                caption: `Arquivo de configuração para ${operator} no iPhone`,
+                            });
+            
+                            const videoPath = path.join(__dirname, videoName);
+                            await downloadFile(videoLink, videoPath);
+            
+                            const videoMedia = MessageMedia.fromFilePath(videoPath);
+                            await client.sendMessage(response.from, videoMedia);
+            
+                            await deleteFile(filePath);
+                            await deleteFile(videoPath);
+                        } catch (err) {
+                            console.error(`Erro ao processar os arquivos para ${operator}:`, err);
+                        }
+                    };
+            
+                    if (userReply.includes('vivo') && userReply.includes('iphone')) {
+                        // Registrar data somente se a operadora for válida
+                        registerUserTest(message.from, iphoneTestDates, iphoneTestDatesFilePath);
+                        await sendFileAndVideo(
+                            'Vivo',
+                            'https://drive.google.com/uc?export=download&id=13MwtPe-RbpSMK9v4bymtOPU3hwvSShSe',
+                            'vivodaytesteg.inpv',
+                            'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
+                            'vivo_tutorial_video.mp4'
+                        );
+                    } else if (userReply.includes('tim') && userReply.includes('iphone')) {
+                        // Registrar data somente se a operadora for válida
+                        registerUserTest(message.from, iphoneTestDates, iphoneTestDatesFilePath);
+                        await sendFileAndVideo(
+                            'TIM',
+                            'https://drive.google.com/uc?export=download&id=1DNy7OkGCTxf6g6dPUNMP7Vs3zUj4FpeM',
+                            'timbankday3.inpv',
+                            'https://drive.google.com/uc?export=download&id=1w8Wlt_lcs0gCm845ZsJiYWxjw58MZh-F',
+                            'tim_tutorial_video.mp4'
+                        );
+                    } else if (userReply.includes('claro') && userReply.includes('iphone')) {
+                        // Não registrar data, apenas informar que Claro não está disponível
+                        await simulateTyping(chat, 2000);
+                        await client.sendMessage(
+                            response.from,
+                            'No momento, não trabalhamos com essa operadora. Nossa internet ilimitada está disponível apenas para Vivo e Tim. Se desejar aproveitar nosso serviço, basta adquirir um chip de uma dessas operadoras.'
+                        );
+                    }
+            
+                    // Remover o coletor após a primeira resposta
+                    client.removeListener('message', collector);
+                };
+            
+                client.on('message', collector);
+            
+                break;
+            case '5':            
             await simulateTyping(chat, 2220);
             await client.sendMessage(
                 message.from,
