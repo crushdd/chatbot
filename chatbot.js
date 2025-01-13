@@ -290,6 +290,17 @@ Caso tenha mais dúvidas, entre em contato conosco. Estamos à disposição para
                 message.from,
                 'Por favor, aguarde um momento enquanto direcionamos você para um de nossos atendentes.'
             );
+
+            // Simular digitação antes de enviar a mensagem para o atendente
+            await simulateTyping(chat, 3110);
+
+            // Enviar mensagem para o atendente
+            const atendenteNumero = '5538991075879@c.us'; // Número do atendente no formato internacional
+            const numeroCliente = message.from.replace('@c.us', ''); // Remover o sufixo para obter o número do cliente
+            await client.sendMessage(
+                atendenteNumero,
+                `Alguém precisa de atendimento! Número do cliente: ${numeroCliente}`
+            );
             break;
         case '8':
             await simulateTyping(chat, 3150);
