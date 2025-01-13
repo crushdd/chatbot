@@ -365,7 +365,7 @@ Caso tenha mais dúvidas, entre em contato conosco. Estamos à disposição para
             await simulateTyping(chat, 3150);
             await client.sendMessage(
                 message.from,
-                'Para se tornar um revendedor, entre em contato conosco pelo e-mail: revenda@hypernet.com.br. Enviaremos todas as informações necessárias para você começar.'
+                'Para se tornar nosso revendedor, é bem simples. Temos revenda disponível para Android e uma revenda híbrida para Android e iPhone. Basta escolher uma das opções e a quantidade de crédito/acesso que você deseja adquirir. Para consultar os valores para revendedores, digite o número 9.'
             );
             break;
         case '9':
