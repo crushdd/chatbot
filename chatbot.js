@@ -193,7 +193,7 @@ client.on('message', async (message) => {
                 await simulateTyping(chat, 2000);
                 await client.sendMessage(
                     message.from,
-                    'Você já realizou um teste este mês. Por favor, aguarde até o próximo mês para realizar um novo teste.'
+                    'Você já realizou um teste. Caso queira continuar utilizando o serviço, consulte a tabela de planos digitando *2*.'
                 );
                 break;
             }
@@ -227,7 +227,7 @@ client.on('message', async (message) => {
                     await simulateTyping(chat, 2000);
                     await client.sendMessage(
                         message.from,
-                        'Você já realizou um teste este mês. Por favor, aguarde até o próximo mês para realizar um novo teste.'
+                        'Você já realizou um teste. Caso queira continuar utilizando o serviço, consulte a tabela de planos digitando *2*.'
                     );
                     break;
                 }
